@@ -40,11 +40,9 @@ This is not "Python with a compiler backend," and it is not "Rust with lighter s
 ### Clone the repo
 
 ```bash
-git clone <your-repo-url>
-cd falcon
+git clone https://github.com/jhonpork1233-beep/FALCON.git
+cd FALCON
 ```
-
-Replace `<your-repo-url>` with the actual GitHub repo URL once you publish it.
 
 ### Run Falcon from source without installing it globally
 
