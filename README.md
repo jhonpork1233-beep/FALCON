@@ -233,7 +233,7 @@ If `ollama` is not on `PATH`, set `FALCON_OLLAMA_CMD` to the executable path.
 
 ### Screenshot
 
-Add a terminal screenshot here showing Falcon compiling a native userland program that imports `ai` and talks to a local Ollama model.
+<img width="1456" height="471" alt="Falcon compiling and running the Ollama demo" src="https://github.com/user-attachments/assets/0c180e04-0e67-4db0-ab05-f12af3e08a24" />
 
 ## Project Status
 
