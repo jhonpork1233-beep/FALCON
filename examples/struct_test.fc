@@ -1,0 +1,15 @@
+// Struct test
+import string;
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+func main() {
+    let p = Point { x: 10, y: 20 };
+    print("Point created: x=");
+    print_int(p.x);
+    print(" y=");
+    print_int(p.y);
+    println("");
+}

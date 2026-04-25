@@ -1,0 +1,70 @@
+// AI module
+// Provides tensor types, LLM integration, etc.
+
+// Tensor type for numerical computations
+pub struct Tensor {
+    data: *mut f32,
+    shape: Vec<usize>,
+    strides: Vec<usize>,
+}
+
+impl Tensor {
+    pub func new(shape: &[usize]) -> Tensor {
+        // Create tensor with given shape
+    }
+    
+    pub func from_vec(data: Vec<f32>, shape: &[usize]) -> Tensor {
+        // Create tensor from vector
+    }
+    
+    pub func shape(&self) -> &[usize] {
+        &self.shape
+    }
+    
+    pub func matmul(&self, other: &Tensor) -> Tensor {
+        // Matrix multiplication
+    }
+}
+
+// LLM Model interface
+pub struct Model {
+    // Model handle (wraps llama.cpp or similar)
+}
+
+impl Model {
+    pub func load(path: &str) -> Result<Model, String> {
+        // Load model from file
+    }
+    
+    pub func generate(&self, prompt: &str, max_tokens: usize) -> String {
+        // Generate text from prompt
+    }
+    
+    pub func stream(&self, prompt: &str) -> Iterator<String> {
+        // Stream tokens as they're generated
+    }
+}
+
+// ONNX runtime support (future)
+pub struct OnnxSession {
+    // ONNX session
+}
+
+impl OnnxSession {
+    pub func new(model_path: &str) -> Result<OnnxSession, String> {
+        // Load ONNX model
+    }
+    
+    pub func run(&self, input: &Tensor) -> Result<Tensor, String> {
+        // Run inference
+    }
+}
+
+
+
+
+
+
+
+
+

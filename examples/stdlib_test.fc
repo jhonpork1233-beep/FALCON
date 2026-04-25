@@ -1,0 +1,31 @@
+// Test standard library functions
+// Tests math functions: abs, min, max
+
+import string;
+func main() {
+    // Test abs with positive
+    let a = abs(5);
+    print_int(a);  // Should print 5
+    
+    // Test abs with negative (using subtraction from 0)
+    let neg = 0 - 10;
+    let b = abs(neg);
+    print_int(b);  // Should print 10
+    
+    // Test min
+    let c = min(3, 7);
+    print_int(c);  // Should print 3
+    
+    // Test min with negative
+    let neg5 = 0 - 5;
+    let d = min(neg5, 2);
+    print_int(d);  // Should print -5
+    
+    // Test max
+    let e = max(3, 7);
+    print_int(e);  // Should print 7
+    
+    // Test max with negative
+    let f = max(neg5, 2);
+    print_int(f);  // Should print 2
+}

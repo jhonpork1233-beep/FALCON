@@ -1,0 +1,24 @@
+// falcon_ollama_benchmark.fc - Benchmark Ollama response time
+// Compile: ..\compiler\target\release\falcon-compiler.exe falcon_ollama_benchmark.fc
+// Run: .\falcon_ollama_benchmark.exe
+
+import ai;
+import string;
+
+func main() {
+    println("╔═══════════════════════════════════════════════╗");
+    println("║   🦅 FALCON AI - Ollama Benchmark Test 🦅     ║");
+    println("║   Powered by LLaMA 3.1:8b (Native C)          ║");
+    println("╚═══════════════════════════════════════════════╝");
+    println("");
+    
+    let personality = "You are a helpful AI assistant. Answer the users question directly and concisely. If they ask for code, write the code. If they ask a question, answer it. Do not introduce yourself unless asked. Be helpful and practical.";
+    
+    // Test with same prompt
+    println("Test prompt: write a simple C hello world program");
+    println("");
+    println("🤖 Response:");
+    
+    // Call Ollama directly with timed execution
+    generate("llama3.1:8b", "You are a helpful AI assistant. Answer the users question directly and concisely. User: write a simple C hello world program");
+}

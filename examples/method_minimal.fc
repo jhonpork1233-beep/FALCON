@@ -1,0 +1,18 @@
+// Minimal impl block test
+
+import string;
+struct Point {
+    x: i64,
+    y: i64,
+}
+
+impl Point {
+    func sum(x: i64, y: i64) -> i64 {
+        return x + y;
+    }
+}
+
+func main() {
+    let result = Point::sum(10, 20);
+    print_int(result);
+}

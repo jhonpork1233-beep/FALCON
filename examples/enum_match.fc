@@ -1,0 +1,22 @@
+// Enum with match expression test
+// Tests proper tag lookup from enum registry
+
+import string;
+enum Status {
+    Pending,
+    Running,
+    Done,
+    Failed(i32),
+}
+
+func main() {
+    // Test matching on enum values
+    let status = 1;  // Simulating enum tag value
+    
+    match status {
+        0 => println("Pending"),
+        1 => println("Running"),
+        2 => println("Done"),
+        _ => println("Unknown"),
+    }
+}

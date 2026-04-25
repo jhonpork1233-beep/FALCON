@@ -1,0 +1,22 @@
+# Match Expression - Python-style Falcon
+
+import string
+enum Status:
+    Pending
+    Success
+    Failed(i64)
+
+def get_message(s: Status) -> str:
+    match s:
+        Status::Pending => return "Waiting..."
+        Status::Success => return "Done!"
+        Status::Failed(code) => return "Error occurred"
+
+def main():
+    let s1 = Status::Pending
+    let s2 = Status::Success
+    let s3 = Status::Failed(404)
+    
+    println(get_message(s1))
+    println(get_message(s2))
+    println(get_message(s3))

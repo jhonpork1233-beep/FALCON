@@ -1,0 +1,45 @@
+// Falcon Demo - Shows working features
+// - Functions
+// - Structs  
+// - For loops
+// - Print
+
+import string;
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+func main() {
+    println("=== Falcon Demo ===");
+    println("");
+
+    println("1. Struct with fields:");
+    let p = Point { x: 100, y: 200 };
+    print("   x = ");
+    print_int(p.x);
+    print(", y = ");
+    print_int(p.y);
+    println("");
+    println("");
+
+    println("2. For loop - squares:");
+    print("   ");
+    for i in 1..11 {
+        print_int(i * i);
+        print(" ");
+    }
+    println("");
+    println("");
+
+    println("3. Arithmetic:");
+    print("   5 + 3 = ");
+    print_int(5 + 3);
+    println("");
+    print("   10 * 7 = ");
+    print_int(10 * 7);
+    println("");
+    
+    println("");
+    println("=== Demo Complete ===");
+}

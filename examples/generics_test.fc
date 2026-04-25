@@ -1,0 +1,22 @@
+// Generics Test - type-parameterized functions with monomorphization
+// Expected output: 42 100 84
+
+import string;
+
+func identity<T>(x: T) -> T {
+    return x;
+}
+
+func add_one<T>(x: T) -> T {
+    return x + 1;
+}
+
+func double<T>(x: T) -> T {
+    return x + x;
+}
+
+func main() {
+    print_int(identity(42));
+    print_int(add_one(99));
+    print_int(double(42));
+}

@@ -1,0 +1,40 @@
+// math_native.fc - Native C Math Library Demo  
+// Compile with: falcon math_native.fc
+//
+// These are the SAME math functions Python uses internally (libm)
+// But Falcon calls them directly - no Python VM overhead!
+import string;
+import math;
+
+func main() {
+    println("=== Falcon Native Math Demo ===");
+    println("(Same C library Python uses - native speed!)");
+    println("");
+    
+    // Square root - should be 4
+    println("sqrt(16) = 4");
+    print("  Result: ");
+    print_float(math_sqrt(16.0));
+    print_newline();
+    
+    // Power - 2^10 = 1024
+    println("pow(2, 10) = 1024");
+    print("  Result: ");
+    print_float(math_pow(2.0, 10.0));
+    print_newline();
+    
+    // Pi constant
+    println("pi = 3.14159...");
+    print("  Result (x1000): ");
+    print_float(math_pi() * 1000.0);
+    print_newline();
+    
+    // e constant
+    println("e = 2.71828...");
+    print("  Result (x1000): ");
+    print_float(math_e() * 1000.0);
+    print_newline();
+    
+    println("");
+    println("Native math complete - no VM overhead!");
+}

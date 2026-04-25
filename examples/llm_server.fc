@@ -1,0 +1,34 @@
+import string;
+import ai;
+import std::web;
+import std::net;
+
+func main() {
+    println("=== Falcon Web-Grounded LLM Chat ===");
+    println("");
+    println("Checking local models (ollama list)...");
+    list_models();
+
+    let model = input("Model name (exact, e.g. llama3.1:8b): ");
+    let web_source = input("Web search base URL prefix (query is appended): ");
+    let personality = input("System prompt (empty for default): ");
+    println("");
+    println("Type questions. Press Ctrl+C to stop.");
+    println("Pipeline: query -> web fetch -> grounded generation.");
+    println("");
+
+    let i = 0;
+    while i < 1000 {
+        let query = input("You: ");
+        let c0 = str_concat("curl -sL \"", web_source);
+        let c1 = str_concat(c0, query);
+        let c2 = str_concat(c1, "&format=json&no_html=1&skip_disambig=1");
+        let cmd = str_concat(c2, "\"");
+        let web_context = exec_capture(cmd);
+        println("");
+        println("[Web context fetched. Generating answer...]");
+        generate_with_context(model, query, web_context, personality);
+        println("");
+        i = i + 1;
+    }
+}

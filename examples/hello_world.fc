@@ -1,0 +1,6 @@
+// Hello World in Falcon
+import string;
+func main() {
+    println("Hello, Falcon!");
+}
+

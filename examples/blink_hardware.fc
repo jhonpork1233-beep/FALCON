@@ -1,0 +1,48 @@
+// blink_hardware.fc — Baremetal Blink for ARM STM32 Hardware
+// Target: aarch64-unknown-none or arm-none-eabi
+// Profile: baremetal
+//
+// Build: falcon build blink_hardware.fc --profile=baremetal --target=aarch64-unknown-none
+
+// Hardware boundary — volatile MMIO
+extern func write_volatile(addr: *mut u32, val: u32);
+extern func read_volatile(addr: *const u32) -> u32;
+extern func compiler_fence();
+
+// ARM STM32 GPIO register pointers
+let GPIO_MODER: *mut u32 = 0x40020000 as *mut u32;  // GPIO port mode register
+let GPIO_ODR: *mut u32   = 0x40020014 as *mut u32;  // GPIO output data register
+let PIN: u32 = 5;
+let PIN_MASK: u32 = 32;         // 1 << 5
+let MODER_MASK: u32 = 3072;     // 0b11 << (5*2)
+let MODER_OUTPUT: u32 = 1024;   // 0b01 << (5*2) = output mode
+
+// Software delay with compiler fence
+func delay(count: i64) {
+    let mut i: i64 = 0;
+    while i < count {
+        compiler_fence();
+        i = i + 1;
+    }
+}
+
+// Baremetal entry — never returns
+func _start() -> ! {
+    // Configure pin as output (2 bits per pin in MODER)
+    let mode: u32 = read_volatile(GPIO_MODER as *const u32);
+    let cleared: u32 = mode & (0xFFFFFFFF ^ MODER_MASK);
+    write_volatile(GPIO_MODER, cleared | MODER_OUTPUT);
+
+    // Infinite blink loop
+    loop {
+        // LED ON — read-modify-write: set pin bit
+        let odr: u32 = read_volatile(GPIO_ODR as *const u32);
+        write_volatile(GPIO_ODR, odr | PIN_MASK);
+        delay(500000);
+
+        // LED OFF — read-modify-write: clear pin bit
+        let odr2: u32 = read_volatile(GPIO_ODR as *const u32);
+        write_volatile(GPIO_ODR, odr2 & (0xFFFFFFFF ^ PIN_MASK));
+        delay(500000);
+    }
+}

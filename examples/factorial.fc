@@ -1,0 +1,15 @@
+// Factorial function - tests recursion
+import string;
+func factorial(n: i32) -> i32 {
+    if n <= 1 {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+func main() {
+    let result = factorial(5);
+    print("Factorial of 5: ");
+    print_int(result);
+    println("");
+}

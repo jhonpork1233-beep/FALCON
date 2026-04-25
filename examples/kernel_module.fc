@@ -1,0 +1,96 @@
+// kernel_module.fc — Kernel Driver Module (x86)
+// Compile: falcon build kernel_module.fc --profile=kernel --target=x86_64-unknown-none
+//
+// Real kernel driver: port I/O, PCI bus scan, serial debug output
+// Pure x86 — no ARM addresses
+
+// x86 port I/O — typed hardware boundary
+extern func outb(port: u16, val: u8);
+extern func inb(port: u16) -> u8;
+
+// Initialize COM1 serial port
+func serial_init() {
+    outb(0x3F9 as u16, 0);     // Disable interrupts
+    outb(0x3FB as u16, 0x80);  // Enable DLAB
+    outb(0x3F8 as u16, 0x0C);  // 9600 baud low
+    outb(0x3F9 as u16, 0);     // 9600 baud high
+    outb(0x3FB as u16, 0x03);  // 8N1
+    outb(0x3FA as u16, 0xC7);  // FIFO
+    outb(0x3FC as u16, 0x0B);  // Modem control
+}
+
+// Wait for transmitter ready, then send byte
+func serial_write(byte: u8) {
+    loop {
+        let status: u8 = inb(0x3FD as u16);
+        if (status & 0x20) != 0 {
+            break;
+        }
+    }
+    outb(0x3F8 as u16, byte);
+}
+
+// PCI configuration via x86 I/O ports
+// PCI config: port 0xCF8 (address), port 0xCFC (data)
+func pci_config_read(bus: i64, device: i64, func_num: i64, offset: i64) -> i64 {
+    let address = 0x80000000 | (bus << 16) | (device << 11) | (func_num << 8) | (offset & 0xFC);
+    outb(0xCF8 as u16, address as u8);
+    let data: u8 = inb(0xCFC as u16);
+    return data as i64;
+}
+
+// Check if device exists on PCI bus
+func pci_device_exists(bus: i64, device: i64) -> i64 {
+    let vendor = pci_config_read(bus, device, 0, 0);
+    if vendor == 0xFF {
+        return 0;  // no device
+    }
+    return 1;
+}
+
+// Scan PCI bus and count devices
+func pci_scan() -> i64 {
+    let mut count: i64 = 0;
+    let mut bus: i64 = 0;
+    while bus < 256 {
+        let mut dev: i64 = 0;
+        while dev < 32 {
+            if pci_device_exists(bus, dev) == 1 {
+                count = count + 1;
+            }
+            dev = dev + 1;
+        }
+        bus = bus + 1;
+    }
+    return count;
+}
+
+// Kernel entry — never returns
+func _start() -> ! {
+    serial_init();
+
+    // Print "DRV\n" to serial
+    serial_write(68);  // D
+    serial_write(82);  // R
+    serial_write(86);  // V
+    serial_write(10);  // \n
+
+    // Scan PCI bus
+    let devices = pci_scan();
+
+    // Print device count as ASCII digit
+    if devices < 10 {
+        serial_write((48 + devices) as u8);
+    }
+    serial_write(10);  // \n
+
+    // Driver heartbeat loop
+    let mut counter: i64 = 0;
+    loop {
+        counter = counter + 1;
+        if counter > 1000000 {
+            counter = 0;
+            serial_write(46);  // '.'
+        }
+    }
+}

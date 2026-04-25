@@ -1,0 +1,23 @@
+// Test: real sub-64-bit types
+import string;
+
+func main() {
+    let a: u8 = 255;
+    let b: i32 = 42;
+    let c: i64 = 100;
+    
+    // a should be 255 as u8
+    print("u8 value: ");
+    print_int(a);
+    println("");
+    
+    print("i32 value: ");
+    print_int(b);
+    println("");
+    
+    print("i64 value: ");
+    print_int(c);
+    println("");
+    
+    println("TYPE TEST PASSED");
+}

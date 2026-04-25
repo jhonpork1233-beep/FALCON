@@ -1,0 +1,17 @@
+// ==============================================
+// std::html
+// ==============================================
+// Minimal HTML cleanup helpers.
+
+import string;
+extern func falcon_str_strip_html_tags(input: str) -> str;
+
+func falcon_html_strip_tags(input: str) -> str {
+    let stripped = falcon_str_strip_html_tags(input);
+    let e0 = falcon_str_replace_all(stripped, "&quot;", "\"");
+    let e1 = falcon_str_replace_all(e0, "&#39;", "'");
+    let e2 = falcon_str_replace_all(e1, "&amp;", "&");
+    let e3 = falcon_str_replace_all(e2, "&lt;", "<");
+    let e4 = falcon_str_replace_all(e3, "&gt;", ">");
+    return falcon_str_replace_all(e4, "&nbsp;", " ");
+}

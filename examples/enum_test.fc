@@ -1,0 +1,15 @@
+// Test enum definition and matching
+// This tests Falcon's enum IR foundation
+
+import string;
+enum Status {
+    Pending,
+    Running,
+    Done,
+    Failed(i32),
+}
+
+func main() {
+    let x = 1;
+    print_int(x);
+}

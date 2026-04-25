@@ -1,0 +1,11 @@
+// Test logical NOT operator
+import string;
+
+func main() {
+    let a: i64 = 0;
+    if !a {
+        println("LOGICAL NOT OK");
+    } else {
+        println("NOT FAILED");
+    }
+}

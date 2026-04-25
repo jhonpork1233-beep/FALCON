@@ -1,0 +1,13 @@
+// Const inlining test
+import string;
+
+const X: i64 = 42;
+const Y: i64 = 10;
+
+func main() {
+    let result: i64 = X + Y;
+    print("Result: ");
+    print_int(result);
+    println("");
+    println("CONST TEST PASSED");
+}

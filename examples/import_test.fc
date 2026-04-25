@@ -1,0 +1,14 @@
+// Test file that imports math_utils
+import string;
+import math_utils;
+
+func main() {
+    let a = square(5);
+    print_int(a);  // Should print 25
+    
+    let b = cube(3);
+    print_int(b);  // Should print 27
+    
+    let c = double(10);
+    print_int(c);  // Should print 20
+}

@@ -1,0 +1,34 @@
+// ==============================================
+// Falcon Math Library Bindings
+// ==============================================
+// These functions wrap the C math library (libm)
+// Implementations in: compiler/runtime/falcon_runtime.c
+
+// Trigonometric functions
+extern func falcon_sin(x: f64) -> f64;
+extern func falcon_cos(x: f64) -> f64;
+extern func falcon_tan(x: f64) -> f64;
+extern func falcon_asin(x: f64) -> f64;
+extern func falcon_acos(x: f64) -> f64;
+extern func falcon_atan(x: f64) -> f64;
+
+// Exponential and logarithmic
+extern func falcon_sqrt(x: f64) -> f64;
+extern func falcon_pow(base: f64, exp: f64) -> f64;
+extern func falcon_exp(x: f64) -> f64;
+extern func falcon_log(x: f64) -> f64;
+extern func falcon_log10(x: f64) -> f64;
+
+// Rounding
+extern func falcon_floor(x: f64) -> f64;
+extern func falcon_ceil(x: f64) -> f64;
+extern func falcon_round(x: f64) -> f64;
+
+// Constants
+extern func falcon_pi() -> f64;
+extern func falcon_e() -> f64;
+
+// Integer math
+extern func falcon_abs(value: i64) -> i64;
+extern func falcon_min(a: i64, b: i64) -> i64;
+extern func falcon_max(a: i64, b: i64) -> i64;

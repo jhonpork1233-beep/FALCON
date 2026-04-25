@@ -1,0 +1,33 @@
+// falcon_math_ai.fc - Falcon Math + AI Benchmark
+// Based on working benchmark.fc
+import string;
+import ai;
+
+func main() {
+    println("╔═══════════════════════════════════════════════╗");
+    println("║  🦅 FALCON Math + AI Benchmark               ║");
+    println("╚═══════════════════════════════════════════════╝");
+    println("");
+    
+    println("📊 Running math computation (Sum 1 to 10M)...");
+    
+    // Sum 1 to 10 million - known working code from benchmark.fc
+    let mut sum: i64 = 0;
+    let mut i: i64 = 1;
+    while i <= 10000000 {
+        sum = sum + i;
+        i = i + 1;
+    }
+    
+    print("  ✓ Sum: ");
+    print_int(sum);
+    println("");
+    
+    println("");
+    println("🤖 Sending results to LLM...");
+    
+    generate("llama3.1:8b", "I calculated the sum of 1 to 10000000 and got 50000005000000. Is this correct? Answer in one sentence.");
+    
+    println("");
+    println("📈 FALCON benchmark complete!");
+}

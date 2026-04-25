@@ -1,0 +1,22 @@
+// Traits Test - trait definitions and implementations
+// Expected output: 10 20
+
+import string;
+
+struct Point { x: i64, y: i64 }
+
+trait Printable {
+    func show(self);
+}
+
+impl Printable for Point {
+    func show(self) {
+        print_int(self.x);
+        print_int(self.y);
+    }
+}
+
+func main() {
+    let p = Point { x: 10, y: 20 };
+    p.show();
+}

@@ -1,0 +1,8 @@
+// Test mutability enforcement
+import string;
+
+func main() {
+    let x: i64 = 10;
+    x = 20;
+    println("SHOULD NOT REACH HERE");
+}

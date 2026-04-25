@@ -1,0 +1,47 @@
+// llm_demo.fc - AI/LLM Integration Demo
+// Compile with: falcon llm_demo.fc (uses userland profile)
+
+// Simulated inference function
+import string;
+func run_inference(prompt_id: i64) -> i64 {
+    println("Running inference...");
+    print("  Prompt ID: ");
+    print_int(prompt_id);
+    print_newline();
+    
+    match prompt_id {
+        0 => println("  Result: Success"),
+        1 => println("  Result: Token limit"),
+        _ => println("  Result: Timeout"),
+    }
+    
+    return prompt_id;
+}
+
+// Chat demo
+func chat_demo() {
+    println("=== Falcon LLM Demo ===");
+    println("");
+    
+    println("Model Configuration:");
+    print("  Max tokens: ");
+    print_int(2048);
+    print_newline();
+    print("  Temperature: ");
+    print_int(70);
+    print_newline();
+    println("");
+    
+    let result1 = run_inference(0);
+    println("");
+    let result2 = run_inference(1);
+    println("");
+    let result3 = run_inference(99);
+    println("");
+    
+    println("LLM demo complete!");
+}
+
+func main() {
+    chat_demo();
+}

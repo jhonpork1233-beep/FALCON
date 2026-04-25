@@ -1,0 +1,22 @@
+// Simpler const eval test
+import string;
+
+const SUM: i64 = 5 + 7;
+const PRODUCT: i64 = 6 * 7;
+const SHIFTED: i64 = 1 << 5;
+
+func main() {
+    print("5 + 7 = ");
+    print_int(SUM);
+    println("");
+    
+    print("6 * 7 = ");
+    print_int(PRODUCT);
+    println("");
+    
+    print("1 << 5 = ");
+    print_int(SHIFTED);
+    println("");
+    
+    println("CONST EVAL PASSED");
+}

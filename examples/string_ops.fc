@@ -1,0 +1,31 @@
+// string_ops.fc — Test string utility functions
+// Tests: falcon_strlen, falcon_str_concat, falcon_str_contains, falcon_str_equals
+
+import string;
+
+// Declare the extern string utility functions
+extern func falcon_strlen(s: *const u8) -> i64;
+extern func falcon_str_concat(a: *const u8, b: *const u8) -> *const u8;
+extern func falcon_str_contains(haystack: *const u8, needle: *const u8) -> i64;
+extern func falcon_str_equals(a: *const u8, b: *const u8) -> i64;
+extern func falcon_str_char_at(s: *const u8, index: i64) -> i64;
+
+func main() {
+    // String length
+    let hello = "Hello, Falcon!";
+    let len = falcon_strlen(hello);
+    println("String ops test");
+
+    // String concatenation
+    let greeting = falcon_str_concat("Hello", " World");
+    println(greeting);
+
+    // String contains
+    let has_falcon = falcon_str_contains("Hello Falcon", "Falcon");
+    
+    // String equality
+    let same = falcon_str_equals("abc", "abc");
+    let diff = falcon_str_equals("abc", "xyz");
+
+    println("String ops complete");
+}

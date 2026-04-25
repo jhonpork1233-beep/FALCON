@@ -1,0 +1,42 @@
+// baremetal_blink.fc — ARM MMIO-style Baremetal Blink Loop
+// Compile: falcon build baremetal_blink.fc --profile=baremetal
+//
+// Real baremetal patterns:
+// - _start() -> ! (never returns)
+// - Pointer-based MMIO (*mut u32)
+// - Read-modify-write for all register access
+// - compiler_fence() to prevent delay optimization
+// - No runtime, no heap, no stdlib
+
+// Hardware boundary — volatile MMIO
+extern func read_volatile(addr: *const u32) -> u32;
+extern func write_volatile(addr: *mut u32, val: u32);
+extern func compiler_fence();
+
+// GPIO register pointers (example ARM MCU)
+let GPIO_ODR: *mut u32 = 0x40020C14 as *mut u32;  // GPIO output data register
+let LED_MASK: u32 = 4096;  // pin 12 = 1 << 12
+
+// Software delay with compiler fence
+func delay(cycles: i64) {
+    let mut i: i64 = 0;
+    while i < cycles {
+        compiler_fence();
+        i = i + 1;
+    }
+}
+
+// Baremetal entry — never returns
+func _start() -> ! {
+    loop {
+        // Read-modify-write: set LED bit, preserve other pins
+        let current: u32 = read_volatile(GPIO_ODR as *const u32);
+        write_volatile(GPIO_ODR, current | LED_MASK);
+        delay(200000);
+
+        // Read-modify-write: clear LED bit, preserve other pins
+        let current2: u32 = read_volatile(GPIO_ODR as *const u32);
+        write_volatile(GPIO_ODR, current2 & (0xFFFFFFFF ^ LED_MASK));
+        delay(200000);
+    }
+}

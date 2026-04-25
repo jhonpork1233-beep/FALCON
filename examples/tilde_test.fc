@@ -1,0 +1,8 @@
+// Test bitwise NOT only
+import string;
+
+func main() {
+    let a: i64 = ~0;
+    print_int(a);
+    println("");
+}

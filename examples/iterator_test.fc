@@ -1,0 +1,19 @@
+// Iterator Protocol Test - C1
+// Tests range-based for-in loops (the core iterator concept)
+// Expected output: 0 1 2 3 4 55
+
+import string;
+
+func main() {
+    // Range-based iteration: for i in 0..5
+    for i in 0..5 {
+        print_int(i);
+    }
+
+    // Use range iteration for summation
+    let sum: i64 = 0;
+    for i in 1..11 {
+        sum = sum + i;
+    }
+    print_int(sum);
+}

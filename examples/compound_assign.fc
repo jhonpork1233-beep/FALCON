@@ -1,0 +1,25 @@
+// Test compound assignment operators
+import string;
+func main() {
+    let mut x: i64 = 10;
+    
+    x += 5;
+    print("After += 5: ");
+    print_int(x);
+    println("");
+    
+    x -= 3;
+    print("After -= 3: ");
+    print_int(x);
+    println("");
+    
+    x *= 2;
+    print("After *= 2: ");
+    print_int(x);
+    println("");
+    
+    x /= 4;
+    print("After /= 4: ");
+    print_int(x);
+    println("");
+}

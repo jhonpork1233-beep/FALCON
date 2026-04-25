@@ -1,0 +1,20 @@
+// Collections module — STUB
+// These types are placeholders for future implementation.
+// They exist to define the API surface but cannot be used yet.
+//
+// When implemented, Vec will use falcon_vec_* runtime functions,
+// HashMap will use falcon_hashmap_* runtime functions.
+
+// Dynamic array (heap-allocated in userland)
+// TODO: Implement with falcon_vec_new, falcon_vec_push, falcon_vec_pop, falcon_vec_len, falcon_vec_get
+pub struct Vec {
+    data: i64,
+    len: i64,
+    capacity: i64,
+}
+
+// HashMap (key-value store)
+// TODO: Implement with falcon_hashmap_new, falcon_hashmap_insert, falcon_hashmap_get, falcon_hashmap_remove
+pub struct HashMap {
+    data: i64,
+}

@@ -1,0 +1,27 @@
+// Error Propagation Test - The ? operator
+// Expected output: 110 then 42
+
+import string;
+
+enum Result { Ok(i64), Err(i64) }
+
+func may_fail(x: i64) -> Result {
+    if x > 0 { return Result::Ok(x * 2); }
+    return Result::Err(42);
+}
+
+func process(x: i64) -> Result {
+    let val = may_fail(x)?;
+    return Result::Ok(val + 100);
+}
+
+func main() {
+    match process(5) {
+        Result::Ok(v) => print_int(v),
+        Result::Err(e) => print_int(e),
+    }
+    match process(0) {
+        Result::Ok(v) => print_int(v),
+        Result::Err(e) => print_int(e),
+    }
+}

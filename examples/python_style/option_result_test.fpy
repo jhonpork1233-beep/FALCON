@@ -1,0 +1,41 @@
+# Option Result Test - Python-style Falcon
+# Using Option and Result types
+
+import string
+enum Option:
+    None
+    Some(i64)
+
+enum Result:
+    Ok(i64)
+    Err(str)
+
+def divide(a: i64, b: i64) -> Result:
+    if b == 0:
+        return Result::Err("Division by zero")
+    return Result::Ok(a / b)
+
+def find_positive(x: i64) -> Option:
+    if x > 0:
+        return Option::Some(x)
+    return Option::None
+
+def main():
+    println("=== Option/Result Demo ===")
+    
+    let r1 = divide(10, 2)
+    match r1:
+        Result::Ok(val) => print_int(val)  # 5
+        Result::Err(msg) => println(msg)
+    println("")
+    
+    let r2 = divide(10, 0)
+    match r2:
+        Result::Ok(val) => print_int(val)
+        Result::Err(msg) => println(msg)  # "Division by zero"
+    
+    let o1 = find_positive(42)
+    match o1:
+        Option::Some(val) => print_int(val)  # 42
+        Option::None => println("None")
+    println("")

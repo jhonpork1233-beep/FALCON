@@ -1,0 +1,11 @@
+# Closure Test - Python-style Falcon
+
+import string
+def main():
+    let adder = |x: i64| -> i64:
+        return x + 10
+    
+    let result = adder(5)
+    print("5 + 10 = ")
+    print_int(result)
+    println("")

@@ -1,0 +1,20 @@
+# Array Test - Python-style Falcon
+
+import string
+def main():
+    let arr = [10, 20, 30, 40, 50]
+    
+    println("Array elements:")
+    let mut i = 0
+    while i < 5:
+        print("arr[")
+        print_int(i)
+        print("] = ")
+        print_int(arr[i])
+        println("")
+        i = i + 1
+    
+    let sum = arr[0] + arr[1] + arr[2] + arr[3] + arr[4]
+    print("Sum: ")
+    print_int(sum)
+    println("")

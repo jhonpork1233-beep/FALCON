@@ -1,0 +1,13 @@
+// Generic function test with print_int
+import string;
+
+func identity<T>(x: T) -> T {
+    return x;
+}
+
+func main() {
+    let a: i64 = identity(42);
+    print_int(a);
+    println("");
+    println("GENERICS PASSED");
+}

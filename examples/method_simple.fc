@@ -1,0 +1,16 @@
+// Simplest impl block test
+
+import string;
+struct Point {
+    x: i64,
+}
+
+impl Point {
+    func zero() -> i64 {
+        return 0;
+    }
+}
+
+func main() {
+    print_int(42);
+}

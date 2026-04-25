@@ -1,0 +1,7 @@
+// Test Range expression separately (not in for loop)
+import string;
+func main() {
+    let x = 0..5;
+
+    println("done");
+}

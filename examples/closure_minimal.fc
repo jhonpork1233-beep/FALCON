@@ -1,0 +1,4 @@
+// Minimal closure test - closure only, no other statements
+func main() {
+    let f = |x| x;
+}

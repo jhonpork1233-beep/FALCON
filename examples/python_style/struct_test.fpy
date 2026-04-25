@@ -1,0 +1,14 @@
+# Struct Test - Python-style Falcon
+
+import string
+struct Point:
+    x: i64
+    y: i64
+
+def main():
+    let p = Point { x: 10, y: 20 }
+    print("Point x: ")
+    print_int(p.x)
+    print(", y: ")
+    print_int(p.y)
+    println("")

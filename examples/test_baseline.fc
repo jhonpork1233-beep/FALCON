@@ -1,0 +1,6 @@
+// Minimal closure test - just parse, don't execute
+import string;
+func main() {
+    // Just print to verify the program runs
+    print_int(123);
+}

@@ -1,0 +1,53 @@
+// arduino_blink.fc — Real Baremetal Arduino Uno LED Blink
+// Target: ATmega328P (16 MHz)
+// Profile: baremetal
+//
+// Build:
+//   falcon build arduino_blink.fc --profile=baremetal --target=avr-unknown-none
+// Flash:
+//   avrdude -p atmega328p -c arduino -P COM3 -b 115200 -U flash:w:arduino_blink.bin:r
+
+// Hardware boundary (volatile I/O — provided by runtime stub)
+extern func read_volatile(addr: *const u8) -> u8;
+extern func write_volatile(addr: *mut u8, val: u8);
+extern func compiler_fence();
+
+// AVR I/O register pointers (ATmega328P)
+// Pin 13 = PB5
+let DDRB: *mut u8  = 0x24 as *mut u8;   // Data Direction Register B
+let PORTB: *mut u8 = 0x25 as *mut u8;   // Port B Output Register
+
+let LED_PIN: u8 = 5;
+let LED_MASK: u8 = 32;  // 1 << 5
+
+// Software delay with compiler fence to prevent LLVM optimization
+func delay(cycles: i64) {
+    let mut i: i64 = 0;
+    while i < cycles {
+        compiler_fence();
+        i = i + 1;
+    }
+}
+
+// Baremetal entry — never returns
+func _start() -> ! {
+    // Configure PB5 as output: read-modify-write DDR
+    let d: u8 = read_volatile(DDRB as *const u8);
+    write_volatile(DDRB, d | LED_MASK);
+
+    // Infinite blink loop
+    loop {
+        // LED ON: set PB5 via read-modify-write
+        let p: u8 = read_volatile(PORTB as *const u8);
+        write_volatile(PORTB, p | LED_MASK);
+
+        delay(200000);
+
+        // LED OFF: clear PB5 via read-modify-write
+        // Using XOR mask because ~variable is not yet supported on variables
+        let p2: u8 = read_volatile(PORTB as *const u8);
+        write_volatile(PORTB, p2 & (0xFF ^ LED_MASK));
+
+        delay(200000);
+    }
+}

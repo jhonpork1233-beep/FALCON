@@ -1,0 +1,9 @@
+// simple test - no bitwise ops
+import string;
+
+func main() {
+    let a = 5;
+    let b = 3;
+    let c = a + b;
+    print_int(c);
+}

@@ -1,0 +1,19 @@
+// Test instance method with &self
+
+import string;
+struct Point {
+    x: i64,
+    y: i64,
+}
+
+impl Point {
+    func sum(&self) -> i64 {
+        return self.x + self.y;
+    }
+}
+
+func main() {
+    let p = Point { x: 10, y: 20 };
+    let result = p.sum();
+    print_int(result);
+}

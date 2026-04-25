@@ -1,0 +1,8 @@
+// ==============================================
+// Falcon AI Raw Bindings
+// ==============================================
+// Unsafe/low-level hooks. Keep orchestration in higher-level modules.
+
+extern func falcon_ollama_generate(model: str, prompt: str);
+extern func falcon_ollama_list_models();
+extern func falcon_ollama_chat(model: str, personality: str);

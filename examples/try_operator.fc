@@ -1,0 +1,39 @@
+// try_operator.fc — Test the ? operator with Result
+import string;
+
+extern func print_int(v: i64);
+extern func tag(v: i64) -> i64;
+extern func payload(v: i64) -> i64;
+
+enum Result {
+    Ok(i64),
+    Err(i64),
+}
+
+func might_fail(x: i64) -> Result {
+    if x > 0 {
+        return Result::Ok(x * 2);
+    }
+    return Result::Err(1);
+}
+
+func process(x: i64) -> Result {
+    let doubled = might_fail(x)?;
+    return Result::Ok(doubled + 10);
+}
+
+func main() {
+    let r = process(5);
+    // Should be Ok(20) -> tag 0, payload 20
+    if tag(r) == 0 {
+        let v = payload(r);
+        print_int(v);
+    }
+    println("");
+
+    let r2 = process(0);
+    // Should be Err(1) -> tag 1
+    if tag(r2) == 1 {
+        println("Error propagated");
+    }
+}

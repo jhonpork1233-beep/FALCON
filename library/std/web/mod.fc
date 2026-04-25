@@ -1,0 +1,75 @@
+// ==============================================
+// std::web
+// ==============================================
+// Web helpers built in Falcon over thin process bindings.
+
+import std::net::raw;
+import string;
+import std::json;
+import std::html;
+
+extern func falcon_os_exec_capture(command: str) -> str;
+
+func falcon_web_fetch_url(url: str) -> str {
+    let c0 = falcon_str_concat("curl -sSL \"", url);
+    let c1 = falcon_str_concat(c0, "\"");
+    let cmd = falcon_str_concat(c1, " 2>&1");
+    return falcon_os_exec_capture(cmd);
+}
+
+func falcon_web_search_duckduckgo(query: str) -> str {
+    let c0 = falcon_str_concat("curl -sSL -A \"Mozilla/5.0\" -G --data-urlencode \"q=", query);
+    let c1 = falcon_str_concat(c0, "\" \"https://html.duckduckgo.com/html/\"");
+    let cmd = falcon_str_concat(c1, " 2>&1");
+    return falcon_os_exec_capture(cmd);
+}
+
+func falcon_web_search_wikipedia(query: str) -> str {
+    let c0 = falcon_str_concat("curl -sSL -G --data-urlencode \"srsearch=", query);
+    let c1 = falcon_str_concat(c0, "\" \"https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=5\"");
+    let cmd = falcon_str_concat(c1, " 2>&1");
+    return falcon_os_exec_capture(cmd);
+}
+
+func falcon_web_clean_wikipedia_context(query: str, max_items: i64) -> str {
+    let raw_json = falcon_web_search_wikipedia(query);
+
+    let title_lines_raw = falcon_json_extract_values(raw_json, "title", max_items);
+    let title_lines = falcon_json_unescape_text(title_lines_raw);
+
+    let snippet_lines_raw = falcon_json_extract_values(raw_json, "snippet", max_items);
+    let snippet_lines_unescaped = falcon_json_unescape_text(snippet_lines_raw);
+    let snippet_lines = falcon_html_strip_tags(snippet_lines_unescaped);
+
+    let p0 = falcon_str_concat("Top titles:\n", title_lines);
+    let p1 = falcon_str_concat(p0, "\nSnippets:\n");
+    return falcon_str_concat(p1, snippet_lines);
+}
+
+func falcon_web_grounding_pack(query: str) -> str {
+    let wiki = falcon_web_clean_wikipedia_context(query, 5);
+    let p0 = falcon_str_concat("Web query: ", query);
+    let p1 = falcon_str_concat(p0, "\n\n");
+    let p2 = falcon_str_concat(p1, "[Wikipedia]\n");
+    return falcon_str_concat(p2, wiki);
+}
+
+func fetch_url(url: str) -> str {
+    return falcon_web_fetch_url(url);
+}
+
+func search_duckduckgo(query: str) -> str {
+    return falcon_web_search_duckduckgo(query);
+}
+
+func search_wikipedia(query: str) -> str {
+    return falcon_web_search_wikipedia(query);
+}
+
+func clean_wikipedia_context(query: str, max_items: i64) -> str {
+    return falcon_web_clean_wikipedia_context(query, max_items);
+}
+
+func grounding_pack(query: str) -> str {
+    return falcon_web_grounding_pack(query);
+}

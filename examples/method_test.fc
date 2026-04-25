@@ -1,0 +1,48 @@
+// Test file for static methods with multiple parameters
+// Tests the StaticCall expression implementation
+
+import string;
+struct Point {
+    x: i64,
+    y: i64,
+}
+
+impl Point {
+    // Static method with 2 parameters
+    func sum(a: i64, b: i64) -> i64 {
+        return a + b;
+    }
+    
+    // Static method with 3 parameters
+    func sum3(a: i64, b: i64, c: i64) -> i64 {
+        return a + b + c;
+    }
+    
+    // Static method with no parameters
+    func zero() -> i64 {
+        return 0;
+    }
+    
+    // Static method with one parameter
+    func double(x: i64) -> i64 {
+        return x + x;
+    }
+}
+
+func main() {
+    // Test 2-param static method
+    let result1 = Point::sum(10, 20);
+    print_int(result1);  // Should print 30
+    
+    // Test 3-param static method
+    let result2 = Point::sum3(5, 10, 15);
+    print_int(result2);  // Should print 30
+    
+    // Test no-param static method
+    let result3 = Point::zero();
+    print_int(result3);  // Should print 0
+    
+    // Test 1-param static method
+    let result4 = Point::double(25);
+    print_int(result4);  // Should print 50
+}

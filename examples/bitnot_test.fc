@@ -1,0 +1,10 @@
+// BitNot test — ~variable should work
+import string;
+
+func main() {
+    let x: i64 = 32;
+    let result: i64 = ~x;
+    print("~32 = ");
+    print_int(result);
+    println("");
+}

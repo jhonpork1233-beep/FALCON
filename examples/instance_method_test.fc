@@ -1,0 +1,32 @@
+// Test file for instance methods
+// Tests the MethodCall expression with type tracking
+
+import string;
+struct Point {
+    x: i64,
+    y: i64,
+}
+
+impl Point {
+    // Instance method with &self
+    func sum(&self) -> i64 {
+        return self.x + self.y;
+    }
+    
+    // Instance method with &self and additional parameter
+    func add(&self, n: i64) -> i64 {
+        return self.x + self.y + n;
+    }
+}
+
+func main() {
+    let p = Point { x: 10, y: 20 };
+    
+    // Test instance method call  
+    let result1 = p.sum();
+    print_int(result1);  // Should print 30
+    
+    // Test instance method with parameter
+    let result2 = p.add(5);
+    print_int(result2);  // Should print 35
+}

@@ -1,0 +1,50 @@
+// Falcon Benchmark Suite (simplified)
+
+import string;
+func fib(n: i64) -> i64 {
+    if n <= 1 {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+func sum_loop(n: i64) -> i64 {
+    let mut sum: i64 = 0;
+    let mut i: i64 = 0;
+    while i < n {
+        sum = sum + i;
+        i = i + 1;
+    }
+    return sum;
+}
+
+func nested_loops(n: i64) -> i64 {
+    let mut sum: i64 = 0;
+    let mut i: i64 = 0;
+    while i < n {
+        let mut j: i64 = 0;
+        while j < n {
+            sum = sum + 1;
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    return sum;
+}
+
+func main() {
+    // Fib(35)
+    let fib_result = fib(35);
+    print_int(fib_result);
+    
+    // Sum 10M
+    let sum_result = sum_loop(10000000);
+    print_int(sum_result);
+    
+    // Nested 1Kx1K
+    let nested_result = nested_loops(1000);
+    print_int(nested_result);
+    
+    // Done
+    print_int(999);
+}

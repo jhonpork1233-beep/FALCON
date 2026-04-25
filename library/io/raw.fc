@@ -1,0 +1,26 @@
+// ==============================================
+// Falcon File I/O Library Bindings
+// ==============================================
+// These functions wrap C stdio for file operations
+// Implementations in: compiler/runtime/falcon_runtime.c
+
+// Read file contents into buffer
+// Returns bytes read, or -1 on error
+extern func falcon_file_read(filename: str, buffer: str, max_size: i64) -> i64;
+
+// Write data to file (creates or overwrites)
+// If size < 0, treats data as null-terminated string
+// Returns bytes written, or -1 on error
+extern func falcon_file_write(filename: str, data: str, size: i64) -> i64;
+
+// Append data to file
+// Returns bytes written, or -1 on error
+extern func falcon_file_append(filename: str, data: str, size: i64) -> i64;
+
+// Check if file exists
+// Returns 1 if exists, 0 otherwise
+extern func falcon_file_exists(filename: str) -> i64;
+
+// Get file size in bytes
+// Returns -1 on error
+extern func falcon_file_size(filename: str) -> i64;

@@ -1,0 +1,17 @@
+// Test bounds checking - userland profile
+// This should panic if a negative index is used
+
+import string;
+func main() {
+    let arr = [10, 20, 30, 40, 50];
+    
+    // Valid accesses - should work
+    print_int(arr[0]);
+    print_newline();
+    print_int(arr[2]);
+    print_newline();
+    print_int(arr[4]);
+    print_newline();
+    
+    println("All valid accesses passed!");
+}

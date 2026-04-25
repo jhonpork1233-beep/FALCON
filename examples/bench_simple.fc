@@ -1,0 +1,11 @@
+// Simple loop benchmark
+import string;
+func main() {
+    let mut sum: i32 = 0;
+    for i in 0..100000 {
+        sum = sum + i;
+    }
+    print("Sum: ");
+    print_int(sum);
+    println("");
+}

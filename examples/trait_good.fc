@@ -1,0 +1,21 @@
+// Trait conformance test — VALID: all required methods present
+import string;
+
+trait Printable {
+    func show(self);
+}
+
+struct Point {
+    x: i64,
+    y: i64,
+}
+
+impl Printable for Point {
+    func show(self) {
+        println("Point shown");
+    }
+}
+
+func main() {
+    println("Valid trait impl OK");
+}

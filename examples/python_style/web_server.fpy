@@ -1,0 +1,31 @@
+# Web Server - Python-style Falcon
+# Simulated web server demo
+
+import string
+def handle_request(path: str):
+    print("GET ")
+    println(path)
+    
+    if path == "/":
+        println("  -> 200 OK: Welcome to Falcon!")
+    else:
+        if path == "/api/hello":
+            println("  -> 200 OK: {\"message\": \"Hello!\"}")
+        else:
+            println("  -> 404 Not Found")
+
+def main():
+    println("╔═══════════════════════════════════════════════╗")
+    println("║  🦅 Falcon Web Server Demo                    ║")
+    println("╚═══════════════════════════════════════════════╝")
+    println("")
+    println("Simulating requests...")
+    println("")
+    
+    handle_request("/")
+    handle_request("/api/hello")
+    handle_request("/api/users")
+    handle_request("/missing")
+    
+    println("")
+    println("Server simulation complete!")

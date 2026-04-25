@@ -1,0 +1,19 @@
+# loops.fpy — Loop test
+# Tests: while, for-range, let mut
+
+import string
+
+def main():
+    # While loop
+    let mut i: i64 = 0
+    let mut sum: i64 = 0
+    while i < 5:
+        sum = sum + i
+        i = i + 1
+
+    # For range loop
+    let mut total: i64 = 0
+    for j in 0..10:
+        total = total + j
+
+    println("Loops complete")

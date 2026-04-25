@@ -1,0 +1,22 @@
+# Adwaith AI - Python-style Falcon
+# Interactive chatbot with Ollama LLM
+import string
+import ai
+
+def main():
+    println("╔═══════════════════════════════════════════════════════════╗")
+    println("║  🦅 ADWAITH AI - Your Interactive Assistant                ║")
+    println("║  Powered by Falcon + Ollama                                ║")
+    println("╚═══════════════════════════════════════════════════════════╝")
+    println("")
+    
+    let personality = "You are Adwaith, a helpful AI assistant. Be friendly and concise."
+    let model = "llama3.1:8b"
+    
+    println("Type 'quit' to exit")
+    println("")
+    
+    let mut i = 0
+    while i < 1000:
+        chat(model, personality)
+        i = i + 1

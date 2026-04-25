@@ -1,0 +1,44 @@
+// avr_minimal.fc — Minimal AVR Baremetal Blink
+// Target: ATmega328P (Pin 13 = PB5)
+// Profile: baremetal
+//
+// Build: falcon build avr_minimal.fc --profile=baremetal --target=avr-unknown-none
+
+// Hardware boundary — volatile I/O
+extern func write_volatile(addr: *mut u8, val: u8);
+extern func read_volatile(addr: *const u8) -> u8;
+extern func compiler_fence();
+
+// AVR register pointers (ATmega328P)
+let DDRB: *mut u8  = 0x24 as *mut u8;
+let PORTB: *mut u8 = 0x25 as *mut u8;
+let LED_MASK: u8 = 32;  // PB5 = bit 5
+
+// Software delay with compiler fence
+func delay(cycles: i64) {
+    let mut i: i64 = 0;
+    while i < cycles {
+        compiler_fence();
+        i = i + 1;
+    }
+}
+
+// Baremetal entry — never returns
+func _start() -> ! {
+    // Configure PB5 as output (read-modify-write)
+    let d: u8 = read_volatile(DDRB as *const u8);
+    write_volatile(DDRB, d | LED_MASK);
+
+    // Infinite blink loop
+    loop {
+        // LED ON — read-modify-write
+        let p: u8 = read_volatile(PORTB as *const u8);
+        write_volatile(PORTB, p | LED_MASK);
+        delay(200000);
+
+        // LED OFF — read-modify-write with XOR mask
+        let p2: u8 = read_volatile(PORTB as *const u8);
+        write_volatile(PORTB, p2 & (0xFF ^ LED_MASK));
+        delay(200000);
+    }
+}

@@ -1,0 +1,54 @@
+// ==============================================
+// Falcon Math Library Bindings
+// ==============================================
+// These functions wrap the C math library (libm)
+// Implementations in: compiler/runtime/falcon_runtime.c
+
+// Trigonometric functions
+extern func falcon_sin(x: f64) -> f64;
+extern func falcon_cos(x: f64) -> f64;
+extern func falcon_tan(x: f64) -> f64;
+extern func falcon_asin(x: f64) -> f64;
+extern func falcon_acos(x: f64) -> f64;
+extern func falcon_atan(x: f64) -> f64;
+
+// Exponential and logarithmic
+extern func falcon_sqrt(x: f64) -> f64;
+extern func falcon_pow(base: f64, exp: f64) -> f64;
+extern func falcon_exp(x: f64) -> f64;
+extern func falcon_log(x: f64) -> f64;
+extern func falcon_log10(x: f64) -> f64;
+
+// Rounding
+extern func falcon_floor(x: f64) -> f64;
+extern func falcon_ceil(x: f64) -> f64;
+extern func falcon_round(x: f64) -> f64;
+
+// Constants
+extern func falcon_pi() -> f64;
+extern func falcon_e() -> f64;
+
+// Integer math
+extern func falcon_abs(value: i64) -> i64;
+extern func falcon_min(a: i64, b: i64) -> i64;
+extern func falcon_max(a: i64, b: i64) -> i64;
+
+func math_sin(x: f64) -> f64 { return falcon_sin(x); }
+func math_cos(x: f64) -> f64 { return falcon_cos(x); }
+func math_tan(x: f64) -> f64 { return falcon_tan(x); }
+func math_asin(x: f64) -> f64 { return falcon_asin(x); }
+func math_acos(x: f64) -> f64 { return falcon_acos(x); }
+func math_atan(x: f64) -> f64 { return falcon_atan(x); }
+func math_sqrt(x: f64) -> f64 { return falcon_sqrt(x); }
+func math_pow(base: f64, exp: f64) -> f64 { return falcon_pow(base, exp); }
+func math_exp(x: f64) -> f64 { return falcon_exp(x); }
+func math_log(x: f64) -> f64 { return falcon_log(x); }
+func math_log10(x: f64) -> f64 { return falcon_log10(x); }
+func math_floor(x: f64) -> f64 { return falcon_floor(x); }
+func math_ceil(x: f64) -> f64 { return falcon_ceil(x); }
+func math_round(x: f64) -> f64 { return falcon_round(x); }
+func math_pi() -> f64 { return falcon_pi(); }
+func math_e() -> f64 { return falcon_e(); }
+func math_abs(value: i64) -> i64 { return falcon_abs(value); }
+func math_min(a: i64, b: i64) -> i64 { return falcon_min(a, b); }
+func math_max(a: i64, b: i64) -> i64 { return falcon_max(a, b); }

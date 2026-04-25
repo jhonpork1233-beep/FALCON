@@ -1,0 +1,109 @@
+// kernel_real.fc — Real x86_64 Kernel with Serial + VGA Output
+// Compile: falcon build kernel_real.fc --profile=kernel --target=x86_64-unknown-none
+// Run:     qemu-system-x86_64 -kernel kernel.elf -serial stdio
+//
+// Output: "Hello from Falcon kernel!" on serial, "FALCON" on VGA
+
+// x86 port I/O — hardware boundary
+extern func outb(port: u16, val: u8);
+extern func inb(port: u16) -> u8;
+
+// MMIO — VGA text buffer at 0xB8000
+extern func write_volatile(addr: *mut u8, val: u8);
+
+// Initialize COM1 serial port (0x3F8)
+// Sets: 9600 baud, 8N1, FIFO enabled
+func serial_init() {
+    outb(0x3F9 as u16, 0);     // Disable interrupts
+    outb(0x3FB as u16, 0x80);  // Enable DLAB
+    outb(0x3F8 as u16, 0x0C);  // Divisor low: 9600 baud
+    outb(0x3F9 as u16, 0);     // Divisor high
+    outb(0x3FB as u16, 0x03);  // 8 bits, no parity, 1 stop
+    outb(0x3FA as u16, 0xC7);  // Enable FIFO, clear, 14-byte threshold
+    outb(0x3FC as u16, 0x0B);  // IRQs enabled, RTS/DSR set
+}
+
+// Wait for transmitter ready, then send byte
+func serial_write(byte: u8) {
+    loop {
+        let status: u8 = inb(0x3FD as u16);
+        if (status & 0x20) != 0 {
+            break;
+        }
+    }
+    outb(0x3F8 as u16, byte);
+}
+
+// Print "Hello from Falcon kernel!\n"
+func serial_print_hello() {
+    serial_write(72);   // H
+    serial_write(101);  // e
+    serial_write(108);  // l
+    serial_write(108);  // l
+    serial_write(111);  // o
+    serial_write(32);   // (space)
+    serial_write(102);  // f
+    serial_write(114);  // r
+    serial_write(111);  // o
+    serial_write(109);  // m
+    serial_write(32);   // (space)
+    serial_write(70);   // F
+    serial_write(97);   // a
+    serial_write(108);  // l
+    serial_write(99);   // c
+    serial_write(111);  // o
+    serial_write(110);  // n
+    serial_write(32);   // (space)
+    serial_write(107);  // k
+    serial_write(101);  // e
+    serial_write(114);  // r
+    serial_write(110);  // n
+    serial_write(101);  // e
+    serial_write(108);  // l
+    serial_write(33);   // !
+    serial_write(10);   // \n
+}
+
+// VGA text mode: write char + color at position
+// VGA buffer at 0xB8000, each cell = 2 bytes (char + attribute)
+func vga_write(pos: i64, ch: u8, color: u8) {
+    let char_addr: *mut u8 = (0xB8000 + pos * 2) as *mut u8;
+    write_volatile(char_addr, ch);
+    let attr_addr: *mut u8 = (0xB8000 + pos * 2 + 1) as *mut u8;
+    write_volatile(attr_addr, color);
+}
+
+func vga_clear() {
+    let mut i: i64 = 0;
+    while i < 2000 {
+        vga_write(i, 32, 0x07);  // space + light gray
+        i = i + 1;
+    }
+}
+
+// Print "FALCON" green on VGA screen
+func vga_print_banner() {
+    vga_write(0, 70, 0x0A);   // F
+    vga_write(1, 65, 0x0A);   // A
+    vga_write(2, 76, 0x0A);   // L
+    vga_write(3, 67, 0x0A);   // C
+    vga_write(4, 79, 0x0A);   // O
+    vga_write(5, 78, 0x0A);   // N
+}
+
+// Kernel entry — never returns
+func _start() -> ! {
+    serial_init();
+    vga_clear();
+    vga_print_banner();
+    serial_print_hello();
+
+    let mut heartbeat: i64 = 0;
+    loop {
+        heartbeat = heartbeat + 1;
+        if heartbeat > 1000000 {
+            heartbeat = 0;
+            serial_write(46);  // '.' heartbeat
+        }
+    }
+}

@@ -1,0 +1,12 @@
+// Pure computation benchmark - no I/O during the loop
+import string;
+func main() {
+    let mut sum: i64 = 0;
+    let mut i: i64 = 1;
+    while i <= 10000000 {
+        sum = sum + i;
+        i = i + 1;
+    }
+    // Only print at the end
+    print_int(sum);
+}

@@ -1,0 +1,49 @@
+// Comprehensive Option/Result test with match expressions
+// Demonstrates idiomatic error handling patterns
+
+// Option type - for optional values
+import string;
+enum Option {
+    Some(i64),
+    None,
+}
+
+// Result type - for function results that may fail
+enum Result {
+    Ok(i64),
+    Err(i64),
+}
+
+func main() {
+    // === Option Example ===
+    let value = Option::Some(42);
+    let empty = Option::None;
+    
+    // Extract value using tag() and payload()
+    if tag(value) == 0 {
+        // It's Some
+        let v = payload(value);
+        print_int(v);  // Should print 42
+    }
+    
+    if tag(empty) == 1 {
+        // It's None
+        print_int(0);  // Should print 0
+    }
+    
+    // === Result Example ===
+    let success = Result::Ok(100);
+    let failure = Result::Err(1);
+    
+    // Check if success
+    if tag(success) == 0 {
+        let val = payload(success);
+        print_int(val);  // Should print 100
+    }
+    
+    // Check if error
+    if tag(failure) == 1 {
+        let err_code = payload(failure);
+        print_int(err_code);  // Should print 1
+    }
+}

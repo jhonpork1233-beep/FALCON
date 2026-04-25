@@ -1,0 +1,43 @@
+// Test Option/Result patterns using existing enum system
+// This tests if Falcon's enums can support Option/Result patterns
+
+// Option-like enum (with i64 payload for now)
+import string;
+enum Option {
+    Some(i64),
+    None,
+}
+
+// Result-like enum
+enum Result {
+    Ok(i64),
+    Err(i64),
+}
+
+func main() {
+    // Test Option::Some
+    let some_val = Option::Some(42);
+    
+    // Test Option::None
+    let none_val = Option::None;
+    
+    // Test Result::Ok
+    let ok_val = Result::Ok(100);
+    
+    // Test Result::Err  
+    let err_val = Result::Err(1);
+    
+    // Use tag() to check variant
+    let some_tag = tag(some_val);
+    let none_tag = tag(none_val);
+    
+    print_int(some_tag);  // Should print 0 (Some is first variant)
+    print_int(none_tag);  // Should print 1 (None is second variant)
+    
+    // Test Result tags
+    let ok_tag = tag(ok_val);
+    let err_tag = tag(err_val);
+    
+    print_int(ok_tag);    // Should print 0 (Ok is first variant)
+    print_int(err_tag);   // Should print 1 (Err is second variant)
+}

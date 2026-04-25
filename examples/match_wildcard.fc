@@ -1,0 +1,10 @@
+// Match expression test with wildcard
+import string;
+func main() {
+    let x = 42;
+    match x {
+        1 => println("one"),
+        2 => println("two"),
+        _ => println("other"),
+    }
+}

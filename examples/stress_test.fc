@@ -1,0 +1,82 @@
+// ===============================================
+// FALCON LLVM BACKEND STRESS TEST
+// Tests: structs, arrays, loops, recursion, match
+// ===============================================
+
+// ================= STRUCT =================
+import string;
+struct Pair {
+    a: i64,
+    b: i64,
+}
+
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+// ================= MAIN =================
+func main() {
+    // ----- struct stress -----
+    println("=== Struct Tests ===");
+    let p1 = Pair { a: 10, b: 20 };
+    let p2 = Point { x: 5, y: 7 };
+    print_int(p1.a);
+    print_int(p1.b);
+    print_int(p2.x);
+    print_int(p2.y);
+    
+    // ----- arithmetic stress -----
+    println("=== Arithmetic ===");
+    let mut sum: i64 = 0;
+    sum = 100 + 200;
+    print_int(sum);
+    
+    // ----- loop stress -----
+    println("=== Loop ===");
+    let mut i: i64 = 0;
+    let mut loopsum: i64 = 0;
+    while i < 10 {
+        loopsum = loopsum + i;
+        i = i + 1;
+    }
+    print_int(loopsum);
+    
+    // ----- match stress -----
+    println("=== Match ===");
+    let x = 2;
+    match x {
+        1 => print_int(100),
+        2 => print_int(200),
+        3 => print_int(300),
+        _ => print_int(999),
+    }
+    
+    // ----- for loop stress -----
+    println("=== For Loop ===");
+    for j in 0..5 {
+        print_int(j);
+    }
+    
+    // ----- array stress -----
+    println("=== Array ===");
+    let arr = [10, 20, 30, 40, 50];
+    print_int(arr[0]);
+    print_int(arr[2]);
+    print_int(arr[4]);
+    
+    // ----- nested control flow -----
+    println("=== Nested Control ===");
+    let y = 5;
+    if y > 0 {
+        if y > 3 {
+            print_int(1000);
+        } else {
+            print_int(500);
+        }
+    } else {
+        print_int(0);
+    }
+    
+    println("=== STRESS TEST COMPLETE ===");
+}

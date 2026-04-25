@@ -1,0 +1,10 @@
+# hello.fpy — Basic .fpy test
+# Tests: print, variables, basic arithmetic
+
+import string
+
+def main():
+    let x: i64 = 10
+    let y: i64 = 20
+    let sum: i64 = x + y
+    println("Hello from Falcon .fpy!")

@@ -1,0 +1,16 @@
+// Minimal test with two parameters
+import string;
+struct Point {
+    x: i64,
+}
+
+impl Point {
+    func add(a: i64, b: i64) -> i64 {
+        return a + b;
+    }
+}
+
+func main() {
+    let result = Point::add(10, 20);
+    print_int(result);
+}

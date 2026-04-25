@@ -1,0 +1,43 @@
+// ==============================================
+// Falcon AI/LLM Module
+// ==============================================
+// Runtime only provides thin model invocation hooks.
+// Prompt/context orchestration lives in Falcon code.
+
+import string;
+
+extern func falcon_ollama_generate(model: str, prompt: str);
+extern func falcon_ollama_list_models();
+extern func falcon_ollama_chat(model: str, personality: str);
+
+func list_models() {
+    falcon_ollama_list_models();
+}
+
+func generate(model: str, prompt: str) {
+    falcon_ollama_generate(model, prompt);
+}
+
+func chat(model: str, personality: str) {
+    falcon_ollama_chat(model, personality);
+}
+
+func falcon_ai_generate_with_context(model: str, question: str, context: str, personality: str) {
+    let p0 = falcon_str_concat(personality, "\n");
+    let p1 = falcon_str_concat(p0, "Use the CONTEXT payload below when relevant.\n");
+    let p2 = falcon_str_concat(p1, "If context is missing or uncertain, explicitly say that.\n");
+    let p3 = falcon_str_concat(p2, "Question: ");
+    let p4 = falcon_str_concat(p3, question);
+    let p5 = falcon_str_concat(p4, "\nCONTEXT: ");
+    let final_prompt = falcon_str_concat(p5, context);
+    falcon_ollama_generate(model, final_prompt);
+}
+
+// Backward-compatible alias now implemented in Falcon code.
+func falcon_ollama_generate_with_context(model: str, prompt: str, context: str, personality: str) {
+    falcon_ai_generate_with_context(model, prompt, context, personality);
+}
+
+func generate_with_context(model: str, question: str, context: str, personality: str) {
+    falcon_ai_generate_with_context(model, question, context, personality);
+}

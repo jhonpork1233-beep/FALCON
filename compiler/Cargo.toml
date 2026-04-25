@@ -1,0 +1,42 @@
+[package]
+name = "falcon-compiler"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "falcon"
+path = "src/main.rs"
+
+[dependencies]
+# LLVM bindings for native code generation (targets LLVM 21)
+# Using raw llvm-sys because inkwell has ABI issues with LLVM 21 on Windows
+libloading = { version = "0.8", optional = true }
+
+# Command line parsing
+clap = { version = "4.0", features = ["derive"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Logging
+env_logger = "0.11"
+log = "0.4"
+
+# Serialization (for IR)
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Utilities
+regex = "1.10"
+either = "1.13"
+falcon-fpy-transpiler = { path = "../tools/fpy_transpiler" }
+
+[features]
+default = []
+llvm = ["dep:libloading"]
+
+[dev-dependencies]
+# Testing
+criterion = "0.5"
+

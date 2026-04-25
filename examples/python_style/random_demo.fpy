@@ -1,0 +1,30 @@
+# Random Demo - Python-style Falcon
+# Python-like random API, but native speed!
+import string
+import random
+
+def main():
+    println("=== Falcon Random Demo ===")
+    
+    # Seed with time for true randomness
+    seed(time_seed())
+    
+    println("5 random floats 0.0-1.0:")
+    let mut i = 0
+    while i < 5:
+        let r = random()
+        print("  ")
+        print_float(r)
+        println("")
+        i = i + 1
+    
+    println("5 random integers 1-100:")
+    i = 0
+    while i < 5:
+        let n = randint(1, 100)
+        print("  ")
+        print_int(n)
+        println("")
+        i = i + 1
+    
+    println("=== Done ===")

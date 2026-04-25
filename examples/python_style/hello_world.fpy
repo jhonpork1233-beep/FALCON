@@ -1,0 +1,5 @@
+# Hello World in Python-style Falcon
+
+import string
+def main():
+    println("Hello, World!")

@@ -1,0 +1,43 @@
+// ==============================================
+// Falcon String/IO Library Bindings
+// ==============================================
+// Basic string I/O operations
+// Implementations in: compiler/runtime/falcon_runtime.c
+
+// Print string to stdout with newline
+extern func falcon_println(s: str);
+
+// Print string to stdout without newline
+extern func falcon_print(s: str);
+
+// Print integer
+extern func falcon_print_int(value: i64);
+
+// Print i32 integer
+extern func falcon_print_i32(value: i32);
+
+// Print float
+extern func falcon_print_float(value: f64);
+
+// Print boolean as "true" or "false"
+extern func falcon_print_bool(value: bool);
+
+// Print newline only
+extern func falcon_print_newline();
+
+// Read a line from stdin (like Python's input())
+extern func falcon_input(prompt: str) -> str;
+
+// String helpers backed by runtime temp buffers
+extern func falcon_str_concat(a: str, b: str) -> str;
+extern func falcon_str_eq(a: str, b: str) -> bool;
+extern func falcon_str_is_empty(s: str) -> bool;
+extern func falcon_str_len(s: str) -> i64;
+extern func falcon_str_find_from(haystack: str, needle: str, start: i64) -> i64;
+extern func falcon_str_substr(s: str, start: i64, length: i64) -> str;
+extern func falcon_str_replace_all(input: str, target: str, replacement: str) -> str;
+extern func falcon_str_strip_html_tags(input: str) -> str;
+extern func falcon_str_json_extract_values(json: str, key: str, max_items: i64) -> str;
+
+// Panic with message and abort
+extern func falcon_panic(message: str);

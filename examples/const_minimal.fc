@@ -1,0 +1,10 @@
+// Minimal const test
+const X: i64 = 42;
+const Y: i64 = 10;
+
+func main() {
+    let result: i64 = X + Y;
+    print_int(result);
+}
+
+extern func print_int(val: i64);

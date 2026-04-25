@@ -1,0 +1,7 @@
+// Minimal test - just assignments, no for loop
+import string;
+func main() {
+    let x = 5;
+    print_int(x);
+    println("");
+}

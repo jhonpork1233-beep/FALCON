@@ -1,0 +1,40 @@
+// multiprofile_test.fc - Demo file with all three profiles
+// Run with: falcon multiprofile_test.fc --profiles=all
+
+// Shared function - included in ALL profiles
+import string;
+func shared_logic() {
+    print("Shared logic runs everywhere");
+    println("");
+}
+
+// Userland-only function
+#[userland]
+func userland_app() {
+    shared_logic();
+    print("Userland: Full runtime, heap, safety checks");
+    println("");
+}
+
+// Kernel-only function  
+#[kernel]
+func kernel_driver() {
+    shared_logic();
+    print("Kernel: No heap, no panics, strict mode");
+    println("");
+}
+
+// Baremetal-only function
+#[baremetal]
+func baremetal_firmware() {
+    shared_logic();
+    print("Baremetal: Zero runtime, direct hardware");
+    println("");
+}
+
+// Main entry point - shared
+func main() {
+    print("=== Falcon Multi-Profile Demo ===");
+    println("");
+    shared_logic();
+}

@@ -1,0 +1,18 @@
+# Enum Test - Python-style Falcon
+
+import string
+enum Color:
+    Red
+    Green
+    Blue
+
+def main():
+    let c = Color::Red
+    print("Color tag: ")
+    print_int(tag(c))
+    println("")
+    
+    match c:
+        Color::Red => println("It's red!")
+        Color::Green => println("It's green!")
+        Color::Blue => println("It's blue!")

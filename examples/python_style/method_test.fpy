@@ -1,0 +1,28 @@
+# Method Test - Python-style Falcon
+# Struct with methods using impl
+
+import string
+struct Point:
+    x: i64
+    y: i64
+
+impl Point:
+    def new(x: i64, y: i64) -> Point:
+        return Point { x: x, y: y }
+    
+    def distance_squared(self) -> i64:
+        return self.x * self.x + self.y * self.y
+
+def main():
+    let p = Point::new(3, 4)
+    
+    print("Point: (")
+    print_int(p.x)
+    print(", ")
+    print_int(p.y)
+    println(")")
+    
+    let dist_sq = p.distance_squared()
+    print("Distance squared: ")
+    print_int(dist_sq)
+    println("")  # Should be 25 (3^2 + 4^2)

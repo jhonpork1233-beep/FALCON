@@ -1,0 +1,14 @@
+// Closure test file
+// Tests basic closure syntax parsing
+
+import string;
+func main() {
+    // Simple closure that adds 1
+    let add_one = |x| x + 1;
+    
+    // Closure with explicit type
+    let multiply = |x: i64, y: i64| x * y;
+    
+    // For now, just test that parsing works
+    print_int(42);
+}

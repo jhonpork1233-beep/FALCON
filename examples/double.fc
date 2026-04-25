@@ -1,0 +1,13 @@
+// Simple test: variable assignment from function call
+import string;
+func double_value(x: i32) -> i32 {
+    return x + x;
+}
+
+func main() {
+    let a = 5;
+    let b = double_value(a);
+    print("Doubled value: ");
+    print_int(b);
+    println("");
+}

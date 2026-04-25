@@ -1,0 +1,52 @@
+// web_server.fc - Conceptual HTTP Server Demo
+// Compile with: falcon web_server.fc (uses userland profile)
+
+// Handle route
+import string;
+func handle_path(path: i64) -> i64 {
+    match path {
+        0 => println("Handling: GET /"),
+        1 => println("Handling: GET /api"),
+        2 => println("Handling: GET /health"),
+        _ => println("404: Not Found"),
+    }
+    
+    // Return status code  
+    if path < 3 {
+        return 200;
+    }
+    return 404;
+}
+
+// Log response
+func log_response(status: i64) {
+    print("Response status: ");
+    print_int(status);
+    print_newline();
+}
+
+// Simulated server
+func serve() {
+    println("=== Falcon Web Server Demo ===");
+    println("Starting server...");
+    println("");
+    
+    let resp1 = handle_path(0);
+    log_response(resp1);
+    
+    let resp2 = handle_path(1);
+    log_response(resp2);
+    
+    let resp3 = handle_path(2);
+    log_response(resp3);
+    
+    let resp4 = handle_path(99);
+    log_response(resp4);
+    
+    println("");
+    println("Server stopped.");
+}
+
+func main() {
+    serve();
+}

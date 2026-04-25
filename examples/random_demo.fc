@@ -1,0 +1,46 @@
+// random_demo.fc - Python Random Module (Ported to Falcon)
+// Compile with: falcon random_demo.fc
+//
+// This is Python's random module - running at native speed!
+// Same API: random(), randint(), seed()
+import string;
+import random;
+
+func main() {
+    println("=== Python Random Module (Native!) ===");
+    println("");
+    
+    // Set seed for reproducibility (like Python's random.seed(42))
+    println("Setting seed to 42...");
+    seed(42);
+    
+    // Generate random integers (like Python's random.randint(1, 100))
+    println("");
+    println("randint(1, 100) - 5 random numbers:");
+    
+    let i = 0;
+    while i < 5 {
+        print("  ");
+        print_int(randint(1, 100));
+        print_newline();
+        i = i + 1;
+    }
+    
+    // Dice roll simulation
+    println("");
+    println("Dice rolls (randint(1, 6)):");
+    
+    let j = 0;
+    while j < 6 {
+        print("  Roll ");
+        print_int(j + 1);
+        print(": ");
+        print_int(randint(1, 6));
+        print_newline();
+        j = j + 1;
+    }
+    
+    println("");
+    println("Random module demo complete!");
+    println("(Same API as Python - native speed!)");
+}

@@ -1,0 +1,4 @@
+import string;
+func main() {
+    print_int(1);
+}

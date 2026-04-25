@@ -1,0 +1,19 @@
+# LLM Ollama Demo - Python-style Falcon
+# Call local LLM via Ollama
+import string
+import ai
+
+def main():
+    println("=== Falcon LLM Demo ===")
+    println("Calling local Ollama LLM...")
+    println("")
+    
+    let model = "llama3.1:8b"
+    let prompt = "Explain what a compiler does in one sentence."
+    
+    print("[Prompt] ")
+    println(prompt)
+    println("")
+    print("[Response] ")
+    generate(model, prompt)
+    println("")

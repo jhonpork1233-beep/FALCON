@@ -1,0 +1,32 @@
+// Test signed integer operations
+// Verifies that division and comparisons work correctly with negative numbers
+
+import string;
+func main() {
+    // Test signed division directly
+    let div_result = 0 - 10;  // -10
+    let div_final = div_result / 5;
+    print_int(div_final);  // Should print -2
+    
+    // Test signed comparison - negative less than positive
+    let neg = 0 - 5;  // -5
+    if neg < 3 {
+        print_int(1);  // Should print 1 (true: -5 < 3)
+    } else {
+        print_int(0);
+    }
+    
+    // Test signed comparison - greater than with negatives
+    let a = 0 - 1;   // -1
+    let b = 0 - 10;  // -10
+    if a > b {
+        print_int(1);  // Should print 1 (-1 > -10)
+    } else {
+        print_int(0);
+    }
+    
+    // Test negative multiplication
+    let neg3 = 0 - 3;
+    let mul_result = neg3 * 4;
+    print_int(mul_result);  // Should print -12
+}

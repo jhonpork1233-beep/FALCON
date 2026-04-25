@@ -1,0 +1,6 @@
+// Minimal bitwise test
+import string;
+func main() {
+    let a: i64 = 12 & 10;
+    print_int(a);
+}

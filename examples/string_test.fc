@@ -1,0 +1,29 @@
+// string_test.fc - Test string operations
+import string;
+
+func main() {
+    let greeting = "Hello";
+    let name = "Falcon";
+    
+    // Test str_concat
+    let msg = str_concat(greeting, " ");
+    let full = str_concat(msg, name);
+    println(full);
+    
+    // Test str_len
+    let len = str_len(full);
+    print("Length: ");
+    print_int(len);
+    print_newline();
+    
+    // Test str_eq
+    let same = str_eq("hello", "hello");
+    print("Equal: ");
+    print_bool(same);
+    print_newline();
+    
+    let diff = str_eq("hello", "world");
+    print("Different: ");
+    print_bool(diff);
+    print_newline();
+}

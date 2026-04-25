@@ -1,0 +1,93 @@
+// Networking module
+// Provides HTTP, WebSocket, TCP/UDP support
+
+// HTTP Server
+pub struct Server {
+    addr: String,
+    routes: Vec<Route>,
+}
+
+pub struct Route {
+    path: String,
+    handler: fn(Request) -> Response,
+}
+
+pub struct Request {
+    method: String,
+    path: String,
+    headers: HashMap<String, String>,
+    body: String,
+}
+
+pub struct Response {
+    status: u16,
+    headers: HashMap<String, String>,
+    body: String,
+}
+
+impl Server {
+    pub func new(addr: &str) -> Server {
+        Server {
+            addr: addr.to_string(),
+            routes: Vec::new(),
+        }
+    }
+    
+    pub func route(&mut self, path: &str, handler: fn(Request) -> Response) {
+        // Add route
+    }
+    
+    pub func run(&self) {
+        // Start server
+    }
+}
+
+impl Response {
+    pub func text(body: &str) -> Response {
+        Response {
+            status: 200,
+            headers: HashMap::new(),
+            body: body.to_string(),
+        }
+    }
+    
+    pub func json<T>(data: &T) -> Response {
+        // Serialize to JSON
+    }
+    
+    pub func status(code: u16) -> Response {
+        Response {
+            status: code,
+            headers: HashMap::new(),
+            body: String::new(),
+        }
+    }
+}
+
+// WebSocket support (future)
+pub struct WebSocket {
+    // WebSocket connection
+}
+
+impl WebSocket {
+    pub func send(&mut self, message: &str) -> Result<(), String> {
+        // Send message
+    }
+    
+    pub func recv(&mut self) -> Option<String> {
+        // Receive message
+    }
+    
+    pub func close(&mut self) {
+        // Close connection
+    }
+}
+
+
+
+
+
+
+
+
+

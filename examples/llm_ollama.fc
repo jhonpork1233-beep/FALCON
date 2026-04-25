@@ -1,0 +1,21 @@
+// llm_ollama.fc - Real Ollama LLM Integration Demo
+// Compile with: falcon llm_ollama.fc
+//
+// This talks to your local Ollama server!
+// Make sure Ollama is running: ollama serve
+import string;
+import ai;
+
+func main() {
+    println("=== Falcon + Ollama LLM Demo ===");
+    println("");
+    
+    println("Asking phi3:mini to explain Falcon...");
+    println("");
+    
+    // Call Ollama with model and prompt
+    generate("phi3:mini", "What is a falcon? Answer in 2 sentences.");
+    
+    println("");
+    println("Demo complete!");
+}

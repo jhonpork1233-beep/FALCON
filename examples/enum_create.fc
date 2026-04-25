@@ -1,0 +1,29 @@
+// Enum creation syntax test
+// Tests EnumName::Variant and EnumName::Variant(value) syntax
+
+import string;
+enum Status {
+    Pending,
+    Running,
+    Done,
+    Failed(i32),
+}
+
+func main() {
+    // Create enum values using new syntax
+    let s1 = Status::Pending;
+    let s2 = Status::Running;
+    let s3 = Status::Done;
+    let s4 = Status::Failed(42);
+    
+    // Test tag extraction
+    let t1 = tag(s1);
+    let t4 = tag(s4);
+    
+    print_int(t1);  // Should be 0 (Pending)
+    print_int(t4);  // Should be 3 (Failed)
+    
+    // Test payload extraction
+    let p4 = payload(s4);
+    print_int(p4);  // Should be 42
+}

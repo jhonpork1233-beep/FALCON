@@ -1,0 +1,9 @@
+// For loop - print squares
+import string;
+func main() {
+    for i in 1..6 {
+        print_int(i * i);
+        print(" ");
+    }
+    println("");
+}

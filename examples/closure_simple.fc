@@ -1,0 +1,9 @@
+// Simple closure test - constant in body
+import string;
+func main() {
+    // A closure with one parameter that ignores it and returns 42
+    let const_fn = |ignored| 42;
+    
+    // Print success to show parsing worked
+    print_int(999);
+}

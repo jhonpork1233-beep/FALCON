@@ -1,0 +1,33 @@
+# Falcon Math AI Benchmark - Python-style Falcon
+# Compute sum and ask LLM to verify
+import string
+import ai
+
+def main():
+    println("╔════════════════════════════════════════════════════════════╗")
+    println("║  🦅 FALCON Math + AI Benchmark                             ║")
+    println("╚════════════════════════════════════════════════════════════╝")
+    
+    # Math computation
+    println("📊 Computing sum of 1 to 10 million...")
+    let mut sum: i64 = 0
+    let mut i: i64 = 1
+    while i <= 10000000:
+        sum = sum + i
+        i = i + 1
+    
+    print("✓ Sum 1 to 10M = ")
+    print_int(sum)
+    println("")
+    println("")
+    
+    # Ask LLM
+    println("🤖 Asking LLM to verify...")
+    let model = "llama3.1:8b"
+    let prompt = "Is 50000005000000 the correct sum of integers from 1 to 10 million? Answer in one sentence."
+    
+    print("[Ollama] ")
+    generate(model, prompt)
+    println("")
+    
+    println("🏁 Benchmark complete!")

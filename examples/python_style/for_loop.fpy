@@ -1,0 +1,10 @@
+# For Loop - Python-style Falcon
+
+import string
+def main():
+    println("Squares from 1 to 10:")
+    for i in 1..11:
+        let square = i * i
+        print_int(square)
+        print(" ")
+    println("")

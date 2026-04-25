@@ -1,0 +1,34 @@
+import string
+import ai
+import std::web
+
+def main():
+    println("=== Falcon LLM Server v2 (Web Grounded) ===")
+    println("")
+    println("Checking local models (ollama list)...")
+    list_models()
+    println("")
+
+    let model = input("Model name (e.g. llama3.1:8b): ")
+    let personality = input("System prompt (blank = default): ")
+
+    println("")
+    println("Type your question (uses cleaned Wikipedia search context).")
+    println("Press Ctrl+C to stop.")
+    println("")
+
+    let mut i = 0
+    while i < 1000:
+        let query = input("You: ")
+        let web_context = grounding_pack(query)
+
+        println("")
+        println("[Web context fetched]")
+        println("[Clean web context begin]")
+        println(web_context)
+        println("[Clean web context end]")
+
+        generate_with_context(model, query, web_context, personality)
+
+        println("")
+        i = i + 1

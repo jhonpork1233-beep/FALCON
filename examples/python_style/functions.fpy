@@ -1,0 +1,17 @@
+# functions.fpy — Function test
+# Tests: def, return, recursion, function calls
+
+import string
+
+def factorial(n: i64) -> i64:
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+def add(a: i64, b: i64) -> i64:
+    return a + b
+
+def main():
+    let result = factorial(5)
+    let sum = add(100, 200)
+    println("Functions complete")

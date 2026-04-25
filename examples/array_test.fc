@@ -1,0 +1,11 @@
+// Comprehensive array test
+import string;
+func main() {
+    let arr = [10, 20, 30];
+    print_int(arr[0]);
+    print(" ");
+    print_int(arr[1]);
+    print(" ");
+    print_int(arr[2]);
+    println("");
+}

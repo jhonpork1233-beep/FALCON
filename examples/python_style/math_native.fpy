@@ -1,0 +1,31 @@
+# Math Native - Python-style Falcon
+# Using C math library at native speed
+import string
+import math
+
+def main():
+    println("=== Falcon Native Math ===")
+    
+    let angle = 1.5707963267948966  # π/2
+    let sin_val = math_sin(angle)
+    let cos_val = math_cos(angle)
+    let sqrt_val = math_sqrt(16.0)
+    let pow_val = math_pow(2.0, 10.0)
+    
+    print("sin(π/2) = ")
+    print_float(sin_val)
+    println("")
+    
+    print("cos(π/2) = ")
+    print_float(cos_val)
+    println("")
+    
+    print("sqrt(16) = ")
+    print_float(sqrt_val)
+    println("")
+    
+    print("2^10 = ")
+    print_float(pow_val)
+    println("")
+    
+    println("=== Python speed? No. Native speed! ===")

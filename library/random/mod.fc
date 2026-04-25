@@ -1,0 +1,40 @@
+// ==============================================
+// Falcon Random Library Bindings
+// ==============================================
+// Python-style random number generation
+// Implementations in: compiler/runtime/falcon_runtime.c
+
+// Set random seed (like Python's random.seed())
+extern func falcon_random_seed(seed: i64);
+
+// Random float 0.0 to 1.0 (like Python's random.random())
+extern func falcon_random() -> f64;
+
+// Random int a to b inclusive (like Python's random.randint(a, b))
+extern func falcon_randint(a: i64, b: i64) -> i64;
+
+// Random int 0 to n-1 (like Python's random.randrange(n))
+extern func falcon_randrange(n: i64) -> i64;
+
+// Get current time as seed
+extern func falcon_time_seed() -> i64;
+
+func seed(seed: i64) {
+    falcon_random_seed(seed);
+}
+
+func random() -> f64 {
+    return falcon_random();
+}
+
+func randint(a: i64, b: i64) -> i64 {
+    return falcon_randint(a, b);
+}
+
+func randrange(n: i64) -> i64 {
+    return falcon_randrange(n);
+}
+
+func time_seed() -> i64 {
+    return falcon_time_seed();
+}

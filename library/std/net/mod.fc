@@ -1,0 +1,17 @@
+// ==============================================
+// std::net
+// ==============================================
+// Thin process/network bindings only.
+
+import std::net::raw;
+
+extern func falcon_os_exec_capture(command: str) -> str;
+extern func falcon_os_exec_stream(command: str) -> i64;
+
+func exec_capture(command: str) -> str {
+    return falcon_os_exec_capture(command);
+}
+
+func exec_stream(command: str) -> i64 {
+    return falcon_os_exec_stream(command);
+}

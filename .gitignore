@@ -1,0 +1,52 @@
+# Rust build outputs
+target/
+target_verify/
+
+# Native/compiler artifacts
+*.exe
+*.pdb
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.lib
+*.bin
+*.elf
+*.out
+
+# Generated compiler output
+*.ir
+*.ir.json
+*.ll
+*.__gen__.fc
+
+# Logs and local diagnostics
+*.log
+/*.txt
+/compiler/*.txt
+/compiler/*.csv
+/compiler/*.log
+
+# Local generated/example verification folders
+/examples/_verify_runs/
+
+# Local tool downloads and machine-specific drops
+/LLVM-*.exe
+/compiler/libs/
+
+# Python caches
+__pycache__/
+.pytest_cache/
+
+# IDE / editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS noise
+.DS_Store
+Thumbs.db

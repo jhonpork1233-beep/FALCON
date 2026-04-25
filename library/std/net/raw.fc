@@ -1,0 +1,7 @@
+// ==============================================
+// std::net::raw
+// ==============================================
+// Thin host process bindings exposed by runtime.
+
+extern func falcon_os_exec_capture(command: str) -> str;
+extern func falcon_os_exec_stream(command: str) -> i64;

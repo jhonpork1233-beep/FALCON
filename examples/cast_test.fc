@@ -1,0 +1,15 @@
+// cast_test.fc - Verify runtime type casting
+import string;
+
+func main() {
+    let big: i64 = 300;
+    let small = big as i32;
+    println(small);
+
+    let x: i64 = 255;
+    let y = x as i64;
+    println(y);
+
+    let a: i64 = 42;
+    println(a);
+}

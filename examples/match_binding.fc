@@ -1,0 +1,35 @@
+// match_binding.fc - Pattern matching with variable bindings
+// Tests: match on enum variants and bind payload to named variables
+
+import string;
+
+enum Option {
+    Some(i64),
+    None,
+}
+
+func main() {
+    // Test Option::Some binding
+    let some_val = Option::Some(42);
+    match some_val {
+        Option::Some(x) => {
+            print_int(x);
+        },
+        Option::None => {
+            print_int(0);
+        },
+    }
+    println("");
+
+    // Test Option::None
+    let none_val = Option::None;
+    match none_val {
+        Option::Some(y) => {
+            print_int(y);
+        },
+        Option::None => {
+            print_int(0);
+        },
+    }
+    println("");
+}

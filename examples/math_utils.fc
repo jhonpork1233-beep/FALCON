@@ -1,0 +1,13 @@
+// Math utilities for Falcon programs
+
+func square(x: i64) -> i64 {
+    return x * x;
+}
+
+func cube(x: i64) -> i64 {
+    return x * x * x;
+}
+
+func double(x: i64) -> i64 {
+    return x * 2;
+}

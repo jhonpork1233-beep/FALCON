@@ -1,0 +1,10 @@
+// Test mutability - correct usage
+import string;
+
+func main() {
+    let mut x: i64 = 10;
+    x = 20;
+    print_int(x);
+    println("");
+    println("MUT OK");
+}

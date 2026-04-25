@@ -1,0 +1,40 @@
+// Comprehensive closure test - tests all closure syntax variations
+import string;
+func main() {
+    // Test 1: Empty closure (no parameters)
+    let get_val = || 100;
+    let val1 = get_val();
+    print_int(val1);  // Expected: 100
+    
+    // Test 2: Single parameter closure (identity)
+    let identity = |x| x;
+    let val2 = identity(42);
+    print_int(val2);  // Expected: 42
+    
+    // Test 3: Single parameter with explicit type
+    let double = |x: i64| x * 2;
+    let val3 = double(25);
+    print_int(val3);  // Expected: 50
+    
+    // Test 4: Multiple parameters
+    let add = |a, b| a + b;
+    let val4 = add(10, 20);
+    print_int(val4);  // Expected: 30
+    
+    // Test 5: Multiple params with explicit types  
+    let multiply = |x: i64, y: i64| x * y;
+    let val5 = multiply(6, 7);
+    print_int(val5);  // Expected: 42
+    
+    // Test 6: Closure with expression body
+    let add_ten = |n| n + 10;
+    let val6 = add_ten(90);
+    print_int(val6);  // Expected: 100
+    
+    // Test 7: Nested closure calls
+    let composed = add_ten(double(5));
+    print_int(composed);  // Expected: (5*2)+10 = 20
+    
+    // All tests completed
+    print_int(999);  // Success marker
+}

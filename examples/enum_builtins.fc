@@ -1,0 +1,30 @@
+// Test enum builtins: tag() and payload()
+import string;
+enum Option {
+    Some(i64),
+    None,
+}
+
+func main() {
+    // Create an Option::Some(42)
+    let opt = Option::Some(42);
+    
+    // Extract the tag - should be 0 for Some
+    let t = tag(opt);
+    print("Tag: ");
+    print_int(t);
+    println("");
+    
+    // Extract the payload - should be 42
+    let p = payload(opt);
+    print("Payload: ");
+    print_int(p);
+    println("");
+    
+    // Test with None
+    let none_opt = Option::None;
+    let t2 = tag(none_opt);
+    print("None tag: ");
+    print_int(t2);
+    println("");
+}

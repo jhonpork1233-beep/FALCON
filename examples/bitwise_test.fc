@@ -1,0 +1,59 @@
+// Bitwise Operators Test
+// Tests: AND, OR, XOR, NOT, SHL, SHR, hex & binary literals
+import string;
+
+func main() {
+    // === Bitwise AND ===
+    let a: i64 = 0b1100 & 0b1010;  // 12 & 10 = 8
+    print("AND: ");
+    print_int(a);
+    println("");
+
+    // === Bitwise OR ===
+    let b: i64 = 0b1100 | 0b1010;  // 12 | 10 = 14
+    print("OR: ");
+    print_int(b);
+    println("");
+
+    // === Bitwise XOR ===
+    let c: i64 = 0b1100 ^ 0b1010;  // 12 ^ 10 = 6
+    print("XOR: ");
+    print_int(c);
+    println("");
+
+    // === Left Shift ===
+    let d: i64 = 1 << 4;  // 16
+    print("SHL: ");
+    print_int(d);
+    println("");
+
+    // === Right Shift ===
+    let e: i64 = 64 >> 2;  // 16
+    print("SHR: ");
+    print_int(e);
+    println("");
+
+    // === Bitwise NOT ===
+    let f: i64 = ~0;  // -1
+    print("NOT: ");
+    print_int(f);
+    println("");
+
+    // === Hex Literals ===
+    let g: i64 = 0xFF;  // 255
+    print("HEX: ");
+    print_int(g);
+    println("");
+
+    // === Combined Operations ===
+    let h: i64 = (0xF0 & 0xFF) | 0x0F;  // 240 | 15 = 255
+    print("COMBINED: ");
+    print_int(h);
+    println("");
+
+    // === Shift and Mask ===
+    let i: i64 = (1 << 8) - 1;  // 255
+    print("SHIFT_MASK: ");
+    print_int(i);
+    println("");
+}

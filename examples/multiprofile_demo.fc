@@ -1,0 +1,32 @@
+// Multi-profile demo file
+// This file contains code for multiple profiles
+
+// Shared function - included in ALL profiles
+import string;
+func shared_logic() {
+    println("Shared logic works!");
+}
+
+#[userland]
+func app_main() {
+    println("Userland app running");
+    shared_logic();
+}
+
+#[kernel]
+func kernel_driver() {
+    println("Kernel driver loaded");
+    shared_logic();
+}
+
+#[baremetal]
+func firmware_entry() {
+    println("Baremetal firmware started");
+    shared_logic();
+}
+
+// Main entry point - userland only by default
+func main() {
+    println("Demo program");
+    shared_logic();
+}

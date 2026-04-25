@@ -1,0 +1,9 @@
+// Test empty closures
+import string;
+func main() {
+    // Empty closure that returns a constant
+    let get_42 = || 42;
+    
+    // Print success
+    print_int(100);
+}

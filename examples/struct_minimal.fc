@@ -1,0 +1,11 @@
+// Minimal struct test - just init, no field access
+import string;
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+func main() {
+    let p = Point { x: 10, y: 20 };
+    println("Struct created!");
+}

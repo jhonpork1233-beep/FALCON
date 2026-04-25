@@ -1,0 +1,19 @@
+// baremetal_violation.fc — Invalid baremetal code (MUST fail with --profile=baremetal)
+// Compile with: falcon check baremetal_violation.fc --profile=baremetal
+//
+// This file intentionally violates baremetal profile rules:
+// - No _start entrypoint (uses main instead)
+// - No hardware interaction (pure computation)
+
+// VIOLATION: No extern func declarations (no hardware boundary)
+// VIOLATION: No volatile operations
+// VIOLATION: No _start entrypoint
+
+func compute(x: i64) -> i64 {
+    return x * x + 1;
+}
+
+// VIOLATION: main is a userland entrypoint, baremetal requires _start
+func main() {
+    let result = compute(42);
+}

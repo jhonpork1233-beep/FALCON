@@ -1,0 +1,18 @@
+// Test bool literal parsing fix
+import string;
+func main() {
+    let is_ready = true;
+    let is_done = false;
+    
+    if is_ready {
+        println("Ready is true!");
+    }
+    
+    if is_done {
+        println("This should not print");
+    } else {
+        println("Done is false - correct!");
+    }
+    
+    println("Bool test passed!");
+}

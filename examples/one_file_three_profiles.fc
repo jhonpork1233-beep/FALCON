@@ -1,0 +1,33 @@
+// one_file_three_profiles.fc
+// Demonstrates one source file containing all three profile entrypoints.
+
+#[userland]
+func main() -> i64 {
+    let a = 21;
+    let b = 21;
+    let c = a + b;
+    let d = c * 2;
+    return d - 84;
+}
+
+#[kernel]
+func kernel_main() {
+    let mut heartbeat = 0;
+    loop {
+        heartbeat = heartbeat + 1;
+        if heartbeat > 1000000 {
+            heartbeat = 0;
+        }
+    }
+}
+
+#[baremetal]
+func _start() {
+    let mut tick = 0;
+    loop {
+        tick = tick + 1;
+        if tick > 1000000 {
+            tick = 0;
+        }
+    }
+}

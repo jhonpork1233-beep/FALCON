@@ -1,0 +1,16 @@
+// Test bounds checking - should PANIC with negative index
+// This tests that bounds checking works for userland profile
+
+import string;
+func main() {
+    let arr = [10, 20, 30, 40, 50];
+    
+    // This creates a negative index by subtracting
+    let idx = 0 - 1;  // -1
+    
+    // This should trigger bounds check panic
+    print_int(arr[idx]);
+    print_newline();
+    
+    println("ERROR: Should have panicked!");
+}

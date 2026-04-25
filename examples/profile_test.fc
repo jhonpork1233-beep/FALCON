@@ -1,0 +1,6 @@
+// Simple test file for multi-profile build
+
+import string;
+func main() {
+    print_int(42);
+}

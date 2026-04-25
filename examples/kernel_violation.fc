@@ -1,0 +1,21 @@
+// kernel_violation.fc — Invalid kernel code (MUST FAIL with --profile=kernel)
+// Compile: falcon check kernel_violation.fc --profile=kernel
+//
+// This file intentionally violates kernel profile rules:
+// 1. No _start or kernel_main (uses main — wrong entrypoint)
+// 2. Calls println — runtime function forbidden in kernel
+
+import string;
+
+// Hardware boundary present — looks like kernel code
+extern func outb(port: u16, val: u8);
+
+func some_kernel_func() {
+    outb(0x3F8 as u16, 65);
+}
+
+// VIOLATION 1: kernel requires _start() -> ! or kernel_main() -> !, not main()
+// VIOLATION 2: println is a runtime call, forbidden in kernel
+func main() {
+    println("This must fail in kernel profile");
+}

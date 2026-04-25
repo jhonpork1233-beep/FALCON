@@ -1,0 +1,20 @@
+// ==============================================
+// std::json
+// ==============================================
+// Lightweight JSON text utilities.
+
+import string;
+
+extern func falcon_str_json_extract_values(json: str, key: str, max_items: i64) -> str;
+
+func falcon_json_unescape_text(text: str) -> str {
+    let s0 = falcon_str_replace_all(text, "\\n", " ");
+    let s1 = falcon_str_replace_all(s0, "\\r", " ");
+    let s2 = falcon_str_replace_all(s1, "\\t", " ");
+    let s3 = falcon_str_replace_all(s2, "\\\"", "\"");
+    return falcon_str_replace_all(s3, "\\/", "/");
+}
+
+func falcon_json_extract_values(json: str, key: str, max_items: i64) -> str {
+    return falcon_str_json_extract_values(json, key, max_items);
+}

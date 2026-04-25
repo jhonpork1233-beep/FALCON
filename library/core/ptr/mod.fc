@@ -1,0 +1,4 @@
+// core::ptr - low-level pointer capability marker module
+//
+// This module intentionally stays minimal for now.
+// Compiler builtins `read_volatile` / `write_volatile` are lowered in IR.

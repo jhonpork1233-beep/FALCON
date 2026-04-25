@@ -1,0 +1,17 @@
+// Impl block test with one parameter
+
+import string;
+struct Point {
+    x: i64,
+}
+
+impl Point {
+    func add(a: i64) -> i64 {
+        return a + 10;
+    }
+}
+
+func main() {
+    let result = Point::add(32);
+    print_int(result);
+}

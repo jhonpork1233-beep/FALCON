@@ -1,0 +1,36 @@
+// Core types and traits for Falcon
+// This module is always available
+
+// Core traits
+trait Copy {
+    // Types that can be copied (integers, floats, bool, etc.)
+}
+
+trait Clone {
+    func clone() -> i64;
+}
+
+trait Drop {
+    // Types that need cleanup when dropped
+    func drop();
+}
+
+// Result type for error handling
+// TODO: Generic enums (enum Result<T, E>) not yet supported by parser.
+// For now, use i64 tag + i64 value pattern:
+//   tag 0 = Ok,  value = result
+//   tag 1 = Err, value = error code
+struct Result {
+    tag: i64,
+    value: i64,
+}
+
+// Option type for nullable values
+// TODO: Generic enums (enum Option<T>) not yet supported by parser.
+// For now, use i64 tag + i64 value pattern:
+//   tag 0 = None
+//   tag 1 = Some, value = contained value
+struct Option {
+    tag: i64,
+    value: i64,
+}
