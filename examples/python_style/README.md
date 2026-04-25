@@ -1,19 +1,19 @@
 # Python-Style Falcon Examples
 
-This directory contains Falcon examples written in Python-style syntax.
+This directory contains `.fpy` examples for Falcon's Python-style userland front end.
 
-## Syntax Differences
+## Purpose
 
-| Feature | Current Syntax | Python-Style |
-|---------|----------------|--------------|
-| Functions | `func name() { }` | `def name():` |
-| If | `if x { }` | `if x:` |
-| Else | `} else {` | `else:` |
-| While | `while x { }` | `while x:` |
-| For | `for i in range(n) { }` | `for i in range(n):` |
-| Statements | `x = 5;` | `x = 5` |
+These examples demonstrate a friendlier userland syntax that still targets Falcon's normal compiler pipeline after transpilation.
 
-## Note
+## Key Differences from `.fc`
 
-Both syntaxes compile to the same IR and produce identical binaries.
-Python-style is **userland only** - kernel/baremetal use Rust-style for systems clarity.
+| Feature | `.fc` style | `.fpy` style |
+| --- | --- | --- |
+| function declaration | `func main() {}` | `def main():` |
+| blocks | braces | indentation |
+| statement terminators | semicolons | newline-oriented |
+
+## Scope
+
+`.fpy` is currently intended for `userland` only. Kernel and baremetal examples continue to use the standard Falcon source form.

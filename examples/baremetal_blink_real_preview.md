@@ -1,7 +1,8 @@
-# Real Baremetal Blink (End-State Syntax Preview)
+# Baremetal Blink Preview
 
-This is a target-syntax preview for Falcon once low-level baremetal features are fully implemented.
-It is intentionally not tied to the current parser/runtime surface.
+This file is a forward-looking syntax preview for a more feature-complete baremetal workflow.
+
+It is not intended to represent the current guaranteed parser surface. Instead, it shows the direction of a more explicit board- and target-aware baremetal program once more low-level pieces are fully implemented.
 
 ```falcon
 #![profile = "baremetal"]
@@ -48,24 +49,20 @@ func delay(cycles: u32) {
 #[link_section = ".text.start"]
 extern "C" func _start() -> ! {
     unsafe {
-        // Enable GPIO port clock.
         set_bits(RCC_AHB1ENR, GPIOD_ENABLE_BIT);
-
-        // Configure pin 12 as output.
         write_masked(GPIOD_MODER, PIN12_MODE_MASK, PIN12_OUTPUT_MODE);
     }
 
     loop {
         unsafe {
-            set_bits(GPIOD_ODR, PIN12_ODR_BIT); // LED on
+            set_bits(GPIOD_ODR, PIN12_ODR_BIT);
         }
         delay(2_000_000);
 
         unsafe {
-            write_masked(GPIOD_ODR, PIN12_ODR_BIT, 0); // LED off
+            write_masked(GPIOD_ODR, PIN12_ODR_BIT, 0);
         }
         delay(2_000_000);
     }
 }
 ```
-

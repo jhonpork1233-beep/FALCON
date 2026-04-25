@@ -1,103 +1,31 @@
-# Falcon Design Principles (Immutable)
+# Falcon Design Principles
 
-These principles form the foundation of Falcon and **CANNOT** change. Features may evolve, but these principles remain constant.
+This document records the design principles that currently guide Falcon's implementation and documentation.
 
-## Core Principles
+## 1. Profiles define legality
 
-1. **Simple surface, powerful core**
-   - The language syntax should be approachable for beginners
-   - Complexity is hidden in the compiler, not exposed to users
-   - Advanced features are opt-in, not mandatory
+Falcon treats execution context as a compile-time rule. The selected profile determines what code is legal, which imports are valid, and which runtime surfaces are available.
 
-2. **Zero mandatory runtime**
-   - No garbage collector required
-   - Baremetal profile has zero runtime overhead
-   - Userland profile has minimal runtime (only what's necessary)
+## 2. AST and IR serve different jobs
 
-3. **Native-first compilation**
-   - LLVM backend for native code generation
-   - No interpreter or JIT by default
-   - Cross-compilation support from day one
+Falcon keeps an AST for source-oriented work such as parsing, profile filtering, and import resolution. It lowers into IR for semantic validation and backend handoff.
 
-4. **AI as first-class citizen**
-   - Tensor types in standard library
-   - Streaming operations for LLM inference
-   - Model integration APIs
-   - But: AI features are libraries, not core syntax
+## 3. Runtime behavior should be explicit
 
-5. **Safety by default, danger by choice**
-   - Memory safety is the default
-   - `unsafe` keyword is explicit and clear
-   - Profiles control safety guarantees
+Falcon avoids relying on hidden runtime assumptions. Runtime-backed facilities should come from explicit imports and profile-aware resolution, not backend guesswork.
 
-6. **IR is sacred and versioned**
-   - Intermediate Representation is versioned (v0.1, v0.2, etc.)
-   - IR compatibility is maintained across versions
-   - Plugins operate on IR, not syntax
-   - IR is the stable interface
+## 4. The same language should span hosted and freestanding code
 
-7. **If it can be a library, it's not in core**
-   - Core language = syntax, ownership, IR, profiles
-   - Everything else = standard library or external crates
-   - Prevents language bloat
-   - Enables ecosystem growth
+Falcon aims to use one language surface across `userland`, `kernel`, and `baremetal`, while allowing the compiler to reject operations that do not fit the active environment.
 
-8. **Explicit over implicit**
-   - Type annotations when needed
-   - Explicit ownership transfers
-   - Clear error messages
-   - No hidden magic
+## 5. Backends should implement semantics, not invent them
 
-9. **Profiles, not keywords**
-   - Compilation profiles control behavior
-   - Same syntax, different guarantees
-   - No keyword explosion
-   - Contextual safety levels
+Language behavior should be determined before code generation. Backends should translate verified intent rather than deciding correctness on their own.
 
-10. **Restraint over features**
-    - Every feature must justify its existence
-    - Prefer composition over language features
-    - Say "no" to feature requests that break principles
-    - Quality over quantity
+## 6. Language growth should be conservative
 
-## What This Means in Practice
+New features should earn their complexity. Falcon prefers a smaller, clearer core over expanding the language surface to imitate larger ecosystems.
 
-### ✅ IN CORE LANGUAGE:
-- Ownership system (move, borrow, lifetime)
-- Tasks + channels (concurrency primitives)
-- `unsafe` keyword (explicit unsafe blocks)
-- IR primitives (versioned, stable)
-- Profile system (userland/kernel/baremetal)
-- Basic types (integers, floats, bool, strings)
-- Control flow (if, while, for, match)
-- Functions, structs, enums
-- Error handling (Result, Option)
+## 7. Documentation should describe reality
 
-### ❌ NOT IN CORE (must be external):
-- Notebooks → tooling (separate tool)
-- JIT compilation → optional backend
-- GPU kernels → library + IR pass
-- DSLs → macros or plugins
-- Package manager → separate tool (`falcon pkg`)
-- IDE features → LSP server
-- Web frameworks → standard library or crates
-- ORMs → external libraries
-- Testing framework → standard library module
-
-## Enforcement
-
-These principles are enforced through:
-1. **Code review**: Every feature PR must justify alignment with principles
-2. **Documentation**: Principles are referenced in all design decisions
-3. **Community**: Community understands and upholds these principles
-4. **Versioning**: Breaking these principles requires a major version bump
-
-## Evolution
-
-Principles may be **clarified** but never **changed**. If a principle becomes outdated, it indicates a fundamental shift in language direction, requiring a major version (e.g., Falcon 2.0).
-
----
-
-**Last Updated**: 2024-12-29  
-**Version**: 1.0 (Immutable)
-
+Public documentation should reflect the current implementation, note significant gaps, and avoid presenting internal milestones as finished guarantees.

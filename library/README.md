@@ -1,60 +1,48 @@
-# Falcon Library Binding System
+# Falcon Library Bindings
 
-The `library/` directory contains Falcon module bindings for runtime symbols implemented in
-`compiler/runtime/falcon_runtime.c`.
+The `library/` directory contains Falcon modules that bind to runtime-backed functionality implemented under `compiler/runtime/`.
 
-## Canonical Layout
+## Typical Layout
 
-```
+```text
 library/
   <module>/
-    mod.fc        # userland-facing module surface
-    raw.fc        # low-level binding surface
-    kernel.fc     # optional kernel-safe surface
-    baremetal.fc  # optional baremetal-safe surface
+    mod.fc
+    raw.fc
+    kernel.fc
+    baremetal.fc
 ```
 
-Implemented modules:
+Not every module uses every file variant, but the layout reflects the intended split between:
 
-- `library/math/{mod.fc,raw.fc}`
-- `library/io/{mod.fc,raw.fc}`
-- `library/random/{mod.fc,raw.fc}`
-- `library/string/{mod.fc,raw.fc}`
-- `library/ai/{mod.fc,raw.fc}`
+- userland-facing API surfaces
+- lower-level raw bindings
+- optional profile-specific surfaces
 
-## Import-Driven Usage
+## Current Modules
 
-Bindings should be referenced through explicit imports, not implicit global visibility:
+The repository currently includes bindings such as:
+
+- `math`
+- `io`
+- `random`
+- `string`
+- `ai`
+
+## Import Usage
+
+Bindings are expected to be used through explicit imports:
 
 ```falcon
 import random;
-
-func main() {
-    falcon_random_seed(42);
-    let n = falcon_randint(1, 10);
-    print_int(n);
-}
-```
-
-Low-level bindings remain available with explicit raw imports:
-
-```falcon
 import random::raw;
 ```
 
-## Adding New Bindings
+## Adding a New Binding
 
-1. Add C implementation to `compiler/runtime/falcon_runtime.c`.
-2. Add declaration to `compiler/runtime/falcon_runtime.h`.
-3. Add Falcon module declarations under `library/<module>/`.
-4. Keep capability/profile rules aligned with `IMPORT_SYSTEM_SPEC.md`.
+Typical workflow:
 
-## Available Libraries
-
-| Library | Description |
-|---------|-------------|
-| `math` | math functions (sin, cos, sqrt, pow, log, constants) |
-| `io` | file I/O helpers |
-| `random` | Python-style random primitives |
-| `ai` | local LLM integration bindings |
-| `string` | console/string utility bindings |
+1. implement the runtime-backed function in `compiler/runtime/`
+2. declare it in `compiler/runtime/falcon_runtime.h`
+3. add Falcon bindings under `library/<module>/`
+4. keep profile rules aligned with the import system

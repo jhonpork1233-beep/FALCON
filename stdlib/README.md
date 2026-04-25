@@ -1,46 +1,27 @@
-# Falcon Standard Library
+# Falcon Standard Library Status
 
-The Falcon standard library provides core functionality for all Falcon programs.
+The `stdlib/` directory represents the broader standard-library direction for Falcon.
 
-## Structure
+## Current Status
 
-```
-stdlib/
-├── core/          # Core types and traits
-├── collections/   # Vec, HashMap, HashSet
-├── io/           # File I/O, stdin/stdout
-├── net/          # HTTP, WebSocket, TCP/UDP
-├── ai/           # Tensor, LLM integration
-├── time/         # Time and duration
-├── string/        # String utilities
-└── math/         # Math functions
-```
+`stdlib/` is not yet a finished, uniformly implemented standard library. Some modules are more like design direction or early scaffolding than stable public surface.
 
-## Usage
+That means:
 
-Standard library modules are automatically available:
+- not every module is equally wired into the current compiler flow
+- not every API in `stdlib/` should be treated as mature
+- `library/` is generally the better place to look for runtime-backed functionality that is already connected to the current compiler/runtime implementation
 
-```falcon
-// No import needed for core types
-let x: i32 = 42
-let s: String = "hello"
+## Existing Areas
 
-// Import specific modules
-import std::collections::HashMap
-import std::io::println
-```
+The tree currently includes areas such as:
 
-## Profile Support
+- `core`
+- `collections`
+- `io`
+- `net`
+- `ai`
 
-- **userland**: Full standard library available
-- **kernel**: Limited stdlib (no heap allocations)
-- **baremetal**: Minimal stdlib (no runtime dependencies)
+## Recommendation
 
-
-
-
-
-
-
-
-
+For public-facing documentation, treat `stdlib/` as active work in progress rather than as a finished standard library.

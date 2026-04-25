@@ -1,70 +1,62 @@
 # Contributing to Falcon
 
-Thank you for your interest in contributing to Falcon! This document provides guidelines for contributing.
+Falcon is published as an experimental language project. Contributions are welcome, especially when they improve correctness, diagnostics, documentation, tests, and profile enforcement.
 
-## Getting Started
+## Before Opening a Pull Request
 
-1. Fork the repository
-2. Clone your fork
-3. Create a branch for your work
-4. Make your changes
-5. Submit a pull request
+Read these documents first:
+
+- [README.md](README.md)
+- [DESIGN_PRINCIPLES.md](DESIGN_PRINCIPLES.md)
+- [WHAT_FALCON_WILL_NEVER_DO.md](WHAT_FALCON_WILL_NEVER_DO.md)
+
+The project values conservative engineering decisions over feature volume. If a proposal weakens profile enforcement, hides runtime behavior, or expands the language surface without a clear need, it is unlikely to be accepted.
 
 ## Development Setup
 
-### Prerequisites
+Prerequisites:
 
-- Rust (latest stable version)
-- LLVM 11+ (for code generation)
+- Rust stable
+- Cargo
+- LLVM/Clang available locally for native code generation
 
-### Building
+Typical workflow:
 
 ```bash
 cd compiler
-cargo build
-```
-
-### Running Tests
-
-```bash
+cargo check
 cargo test
+cargo check --features llvm
 ```
 
-### Running Examples
+Run an example from source:
 
 ```bash
-cargo run -- build ../examples/hello_world.fc
+cargo run --features llvm --bin falcon -- ../examples/hello_world.fc
 ```
 
-## Code Style
+## Contribution Guidelines
 
-- Follow Rust standard formatting (`cargo fmt`)
-- Use meaningful variable and function names
-- Add comments for complex logic
-- Write tests for new features
+- keep changes tightly scoped
+- prefer existing compiler and runtime patterns over new abstractions
+- add or update tests when behavior changes
+- update documentation when user-visible behavior changes
+- avoid overstating implementation status in comments or docs
 
-## Design Principles
+## Pull Request Expectations
 
-Before proposing features, please read:
-- [Design Principles](DESIGN_PRINCIPLES.md)
-- [What Falcon Will Never Do](WHAT_FALCON_WILL_NEVER_DO.md)
+Please include:
 
-## Pull Request Process
+- a short description of the change
+- why the change is needed
+- test coverage or verification notes
+- any limitations that remain after the change
 
-1. Ensure your code follows the design principles
-2. Add tests if applicable
-3. Update documentation if needed
-4. Ensure all tests pass
-5. Submit PR with clear description
+## Good First Contribution Areas
 
-## Areas for Contribution
-
-- Compiler improvements
-- Standard library modules
-- Documentation
-- Examples
-- Tests
-- Performance optimizations
-
-Thank you for contributing to Falcon! 🦅
-
+- diagnostics and error messages
+- parser and IR tests
+- profile-law hardening
+- docs cleanup
+- example maintenance
+- standard-library clarification

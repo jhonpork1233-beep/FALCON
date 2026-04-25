@@ -1,81 +1,80 @@
 # Falcon Hardware Flash Workflow
 
+This document outlines a practical workflow for building and testing current baremetal examples. It is a supporting guide, not a guarantee that every board and target combination is already turnkey.
+
 ## Prerequisites
 
-- Falcon compiler (with `--features llvm`)
-- LLVM toolchain (`llvm-objcopy`)
-- Target hardware or QEMU for testing
+- Falcon compiler with the LLVM path available
+- LLVM tools such as `llvm-objcopy`
+- target-specific flashing or emulation tools
 
-## Build for x86_64 (QEMU testing)
+## Build a Baremetal Example
 
 ```bash
-# Build baremetal ELF
 falcon build examples/blink_hardware.fc --profile baremetal
+```
 
-# Convert to flat binary (if needed)
+For some targets you may also want a flat binary:
+
+```bash
 llvm-objcopy -O binary blink_hardware.elf blink_hardware.bin
+```
 
-# Test in QEMU
+## Test in QEMU
+
+```bash
 qemu-system-x86_64 -kernel blink_hardware.elf -nographic
 ```
 
-## Cross-compile for ARM (STM32/Cortex-M)
+## Cross-Compile Examples
+
+ARM:
 
 ```bash
-# Build for ARM target
-falcon build blink_hardware.fc --profile baremetal --target aarch64-unknown-none
+falcon build examples/blink_hardware.fc --profile baremetal --target aarch64-unknown-none
+```
 
-# Or for Cortex-M (thumb)
-falcon build blink_hardware.fc --profile baremetal --target thumbv7em-none-eabihf
+Thumb/Cortex-M style target:
 
-# Convert to binary
-llvm-objcopy -O binary blink_hardware.elf blink_hardware.bin
+```bash
+falcon build examples/blink_hardware.fc --profile baremetal --target thumbv7em-none-eabihf
+```
 
-# Flash via OpenOCD
+RISC-V:
+
+```bash
+falcon build examples/blink_hardware.fc --profile baremetal --target riscv64gc-unknown-none-elf
+```
+
+## Flashing
+
+Flashing is target- and board-specific. Typical external tools include:
+
+- OpenOCD
+- probe-rs
+- vendor-specific tooling
+
+Example OpenOCD flow:
+
+```bash
 openocd -f board/st_nucleo_f4.cfg -c "program blink_hardware.bin verify reset exit"
-
-# Or via probe-rs (Rust tool)
-probe-rs run --chip STM32F401RE blink_hardware.elf
 ```
 
-## Cross-compile for RISC-V
+Example probe-rs flow:
 
 ```bash
-# Build for RISC-V 64-bit
-falcon build blink_hardware.fc --profile baremetal --target riscv64gc-unknown-none-elf
-
-# Flash via J-Link
-JLinkExe -device RISCV -if JTAG -speed 4000 -autoconnect 1 -CommanderScript flash.jlink
-```
-
-## Profile Requirements
-
-| Profile | Entry Point | Hosted I/O | Heap | Runtime |
-|---------|------------|------------|------|---------|
-| Userland | `main()` | ✅ Yes | ✅ Yes | Full |
-| Kernel | `kernel_main()` | ❌ Rejected | ❌ Rejected | Freestanding |
-| Baremetal | `_start()` | ❌ Rejected | ❌ Rejected | Zero |
-
-## Interrupt Handlers
-
-Mark functions with `#[interrupt]` attribute:
-
-```falcon
-#[interrupt]
-func timer_isr() {
-    // Handle timer interrupt
-    // Must be in kernel or baremetal profile
-}
+probe-rs run --chip STM32F401RE blink_hardware.elf
 ```
 
 ## Verification
 
-After building, verify no libc symbols leaked:
+It is often useful to verify that freestanding builds are not accidentally pulling in hosted symbols:
 
 ```bash
-# Check for libc symbols (should return empty for freestanding)
-nm blink_hardware.o | grep -E "printf|puts|malloc|fopen"
-
-# Check ELF sections
 llvm-readelf -S blink_hardware.elf
+nm blink_hardware.elf
 ```
+
+## Important Note
+
+The freestanding pipeline is real, but hardware bring-up remains inherently target-specific. Treat this document as a starting point for experimentation rather than a universal flashing manual.

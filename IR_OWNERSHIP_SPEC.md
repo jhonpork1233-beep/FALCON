@@ -1,188 +1,48 @@
 # Falcon IR Ownership Specification
 
-This document defines the formal ownership model at the IR (Intermediate Representation) level.
+This document describes the ownership-related model currently represented in Falcon IR.
 
-## Ownership Invariant
+## Purpose
 
-**For any value V at any point in the program, EXACTLY ONE of these must be true:**
+Falcon lowers source code into IR before code generation. Ownership-related instructions in IR are used to make value movement and borrowing explicit enough for verification passes and backend lowering.
 
-1. **V has exactly ONE owner**
-   - Move semantics, exclusive access
-   - Owner can transfer ownership (move)
-   - Owner can be dropped (destroyed)
+## Core IR Concepts
 
-2. **V has N immutable borrows (N ≥ 1)**
-   - Shared read access
-   - No owner modification allowed
-   - All borrows must outlive the data
+The current IR uses explicit instructions for:
 
-3. **V has exactly ONE mutable borrow**
-   - Exclusive write access
-   - Owner cannot access V while mutably borrowed
-   - No other borrows (immutable or mutable) allowed
+- ownership transfer (`Move`)
+- immutable borrow (`BorrowImm`)
+- mutable borrow (`BorrowMut`)
+- destruction (`Drop`)
 
-**VIOLATIONS are compile-time errors.**
+These instructions give the compiler a place to reason about value flow after parsing and before backend emission.
 
-This invariant is preserved across ALL IR passes.
+## Verification Goals
 
-## IR Ownership Instructions
+The ownership pass is intended to catch:
 
-### Move Operations
+- use of moved values
+- conflicting immutable and mutable borrows
+- multiple mutable borrows
+- drop while still borrowed
 
-```
-move %v1 → %v2
-```
-- Transfers ownership from `%v1` to `%v2`
-- `%v1` becomes invalid after this instruction
-- Compiler verifies `%v1` is not used after move
+## Current Scope
 
-### Borrow Operations
+The current implementation is useful, but it should not be described as a complete borrow checker. In particular, the repository does not yet provide:
 
-```
-borrow_imm %v1 → %r1 lifetime[L1]
-```
-- Creates immutable borrow of `%v1`
-- Result stored in `%r1`
-- Lifetime `L1` tracks borrow validity
-- Multiple immutable borrows allowed
+- full lifetime inference
+- complete destructor insertion
+- a finished `Copy` classification model
+- Rust-equivalent alias analysis
 
-```
-borrow_mut %v1 → %r2 lifetime[L2]
-```
-- Creates mutable borrow of `%v1`
-- Result stored in `%r2`
-- Lifetime `L2` tracks borrow validity
-- Only one mutable borrow allowed at a time
+## Why Keep Ownership in IR
 
-### Drop Operations
+Representing movement and borrowing in IR helps Falcon:
 
-```
-drop %v1
-```
-- Destroys owner `%v1`
-- All borrows of `%v1` must be dead (out of scope)
-- Compiler verifies no active borrows before drop
+- separate source syntax from semantic verification
+- keep profile and ownership checks backend-independent
+- make later compiler stages work from explicit operations rather than inferred intent
 
-### Copy Operations
+## Practical Interpretation
 
-```
-copy %v1 → %v2
-```
-- Creates independent copy (for `Copy` types)
-- Both `%v1` and `%v2` are valid
-- Only for types that implement `Copy` trait
-
-## Lifetime Tracking
-
-Lifetimes in IR are represented as:
-
-```
-lifetime[L1] = { start: block_1, end: block_5 }
-```
-
-The compiler tracks:
-- Where lifetime starts (borrow created)
-- Where lifetime ends (borrow goes out of scope)
-- All uses of borrowed value within lifetime
-
-## Ownership Verification Pass
-
-The compiler runs an ownership verification pass that checks:
-
-1. **No use-after-move**
-   ```ir
-   move %v1 → %v2
-   load %v1  // ERROR: %v1 used after move
-   ```
-
-2. **No simultaneous mut + imm borrows**
-   ```ir
-   borrow_imm %v1 → %r1 lifetime[L1]
-   borrow_mut %v1 → %r2 lifetime[L2]  // ERROR: cannot mutably borrow
-   ```
-
-3. **All borrows outlive their data**
-   ```ir
-   borrow_imm %v1 → %r1 lifetime[L1]
-   drop %v1  // ERROR: %v1 dropped while borrowed
-   // Lifetime L1 must end before drop
-   ```
-
-4. **Mutable borrow exclusivity**
-   ```ir
-   borrow_mut %v1 → %r1 lifetime[L1]
-   borrow_mut %v1 → %r2 lifetime[L2]  // ERROR: cannot mutably borrow twice
-   ```
-
-## IR Example
-
-### Source Code
-```falcon
-func process(data: Vec<i32>) {
-    let ref = &data
-    println(ref[0])
-}
-```
-
-### IR (Simplified)
-```ir
-func process(%data: Vec<i32>) {
-    // Borrow data
-    %ref = borrow_imm %data lifetime[L1]
-    
-    // Load element (uses borrow)
-    %elem = load_index %ref, 0
-    
-    // Print (consumes element)
-    call println(%elem)
-    
-    // Lifetime L1 ends here
-    // Now we can drop %data
-    drop %data
-}
-```
-
-## Profile-Specific Ownership
-
-### userland Profile
-- Full ownership checking
-- Bounds checking on borrows
-- Stack overflow detection
-- Memory sanitizers available
-
-### kernel Profile
-- Full ownership checking
-- Explicit lifetimes at boundaries
-- No implicit allocations
-- Strict aliasing rules
-
-### baremetal Profile
-- Ownership checking (compile-time only)
-- No runtime checks
-- Programmer trusted for correctness
-- Zero overhead
-
-## Mathematical Formalism
-
-For a value V at program point P:
-
-```
-Owner(V, P) ∈ {0, 1}           // Exactly one owner
-ImmBorrows(V, P) ∈ {0, 1, ...}  // Zero or more immutable borrows
-MutBorrows(V, P) ∈ {0, 1}       // Zero or one mutable borrow
-
-Invariant:
-  (Owner(V, P) = 1 AND ImmBorrows(V, P) = 0 AND MutBorrows(V, P) = 0)
-  OR
-  (Owner(V, P) = 0 AND ImmBorrows(V, P) ≥ 1 AND MutBorrows(V, P) = 0)
-  OR
-  (Owner(V, P) = 0 AND ImmBorrows(V, P) = 0 AND MutBorrows(V, P) = 1)
-```
-
-This invariant must hold at every program point.
-
----
-
-**Last Updated**: 2024-12-29  
-**Version**: 1.0
-
+This document should be read as the current IR ownership model used by the repository, not as a statement that Falcon's ownership system is already final.

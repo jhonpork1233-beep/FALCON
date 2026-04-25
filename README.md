@@ -1,50 +1,39 @@
 # Falcon Programming Language
 
-I started Falcon because I wanted one language where I could write with Python-like ease, compile to native code, and still target user apps, kernels, and baremetal without changing the language every time the environment changed.
+Falcon is an experimental systems programming language built around one central idea:
 
-The core idea is simple:
+> Profiles define reality. The compiler enforces it.
 
-> **Profiles define reality. The compiler enforces it.**
-
-Falcon is an experimental systems programming language. The profile model is real. The compiler is real. The LLVM path is real. The rough edges are real too. I am not calling this production-ready yet, and I am not claiming Rust-level memory safety yet.
-
-If you are here to try it, build it, or audit it, this README is meant to tell you exactly what Falcon is today.
-
-## What Falcon Is
-
-Falcon is trying to keep the same language across three execution realities:
+Falcon uses one language surface across three execution environments:
 
 - `userland`
 - `kernel`
 - `baremetal`
 
-Instead of treating those as docs or flags you are expected to remember, Falcon makes them part of compilation.
+The project is early, but the compiler, profile model, LLVM path, and import contract are real. The repository is published as an honest alpha, not as a finished production language.
 
-That means:
+## Overview
 
-- code that is valid in `userland` can be rejected in `kernel`
-- imports are profile-aware
-- runtime access is explicit
-- the compiler does profile filtering before later stages continue
+Falcon is designed around a few constraints:
 
-This is not "Python with a compiler backend," and it is not "Rust with lighter syntax." Falcon is its own experiment: **compile-time execution context as a language rule**.
+- execution context is a compile-time property, not a runtime switch
+- imports are explicit and profile-aware
+- AST is used for source-oriented analysis and filtering
+- IR is used as the semantic handoff to verification and code generation
+- the same language can target hosted and freestanding builds
 
-## Try It Fast
+Falcon is not positioned as "Python compiled directly" and it is not marketed as "Rust-level memory safety today." It is a systems-language experiment with a serious compiler core and several unfinished subsystems.
 
-### Prerequisites
+## Quick Start
 
-- Rust and Cargo
-- LLVM/Clang available on your machine
-- Ollama installed locally if you want to try the AI demos
-
-### Clone the repo
+### Clone the repository
 
 ```bash
 git clone https://github.com/jhonpork1233-beep/FALCON.git
 cd FALCON
 ```
 
-### Run Falcon from source without installing it globally
+### Build and run from source
 
 ```bash
 cd compiler
@@ -53,14 +42,14 @@ cargo run --features llvm --bin falcon -- ../examples/one_file_three_profiles.fc
 cargo run --features llvm --bin falcon -- ../examples/python_style/hello_world.fpy
 ```
 
-### Install the `falcon` CLI globally
+### Install the CLI
 
 ```bash
 cd compiler
 cargo install --path . --features llvm --bin falcon --force
 ```
 
-After that you can run Falcon from the repo root:
+Then run Falcon from the repository root:
 
 ```bash
 falcon examples/hello_world.fc
@@ -75,7 +64,7 @@ cd compiler
 .\install-falcon.ps1 -Force
 ```
 
-## Falcon At A Glance
+## Compiler Pipeline
 
 ```mermaid
 flowchart LR
@@ -91,29 +80,26 @@ flowchart LR
     H --> K["baremetal ELF"]
 ```
 
-That is the important part of Falcon for me: the selected profile is not a late runtime toggle. It shapes the compilation path all the way through.
+Falcon uses both AST and IR on purpose:
 
-## Why Falcon Feels Different
+- the AST keeps source structure available for profile filtering, import resolution, and source-level validation
+- the IR is the semantic handoff for profile checks, ownership-related verification, and backend lowering
 
-### 1. Profiles are compile-time laws
+## Profiles
 
-Falcon currently supports:
+| Profile | Intended use | Runtime | Hosted I/O | Heap |
+| --- | --- | --- | --- | --- |
+| `userland` | native applications and tools | yes | yes | yes |
+| `kernel` | freestanding components and low-level services | no hosted runtime | rejected | rejected by default |
+| `baremetal` | firmware and direct hardware control | no hosted runtime | rejected | rejected by default |
 
-- `userland`
-- `kernel`
-- `baremetal`
+Direct file mode defaults to `userland`.
 
-Each profile has different allowed capabilities. Today:
+Freestanding builds require explicit entrypoints and profile-safe imports. The compiler rejects many hosted facilities in `kernel` and `baremetal` builds.
 
-- `userland` allows runtime, heap, threads, OS-facing helpers, and more
-- `kernel` allows only the freestanding/unsafe side by default
-- `baremetal` also allows only the freestanding/unsafe side by default
+## One File, Three Profiles
 
-If a module or call needs capabilities the active profile does not allow, Falcon should reject it during compilation.
-
-### 2. One source file can target all three
-
-Falcon can compile one file into multiple realities by filtering the AST per profile before later stages continue.
+Falcon can compile one file multiple times with different profile filters applied before later stages continue.
 
 ```falcon
 #[userland]
@@ -150,55 +136,15 @@ func _start() {
 falcon examples/one_file_three_profiles.fc --profiles all
 ```
 
-That does not compile once and sprinkle flags later. Falcon runs the pipeline separately for each chosen profile.
-
-On Windows, the outputs are profile-suffixed:
+On Windows, outputs are profile-suffixed, for example:
 
 - `one_file_three_profiles.userland.exe`
 - `one_file_three_profiles.kernel.elf`
 - `one_file_three_profiles.baremetal.elf`
 
-### 3. AST first, IR after that
+## Python-Style Falcon
 
-Falcon uses both because they serve different jobs.
-
-The AST is useful for:
-
-- parsing
-- profile filtering
-- import resolution
-- source-oriented validation
-
-The IR is where Falcon makes execution rules more explicit before codegen:
-
-- lowered operations
-- profile checks
-- import contract checks
-- ownership-related verification
-- backend handoff
-
-The current pipeline is:
-
-```text
-Source
-  -> optional .fpy transpile
-  -> lexer
-  -> parser
-  -> AST
-  -> profile filter
-  -> import resolution
-  -> trait / generic passes
-  -> IR lowering
-  -> import + profile + ownership checks
-  -> LLVM backend
-  -> native output
-```
-
-## `.fpy`: Python-Style Falcon
-
-Falcon also supports `.fpy`, which is a Python-style front end for Falcon source.
-
-Example:
+Falcon supports `.fpy` as a Python-style front end for userland programs.
 
 ```python
 import string
@@ -207,31 +153,28 @@ def main():
     println("Hello, World!")
 ```
 
-Both styles aim at the same compiler pipeline and the same IR.
-
-What happens internally:
-
-1. Falcon detects the `.fpy` extension.
-2. It transpiles the file to `something.__gen__.fc`.
-3. The normal Falcon compiler pipeline continues from that generated file.
-4. The generated file is deleted unless you pass `--keep-generated`.
+Build it the same way:
 
 ```bash
 falcon examples/python_style/hello_world.fpy
 falcon build examples/python_style/hello_world.fpy --keep-generated
 ```
 
+The compiler:
+
+1. detects the `.fpy` extension
+2. transpiles the file to `something.__gen__.fc`
+3. continues through the standard Falcon pipeline
+
 Important limit:
 
-- `.fpy` is **userland-only**
+- `.fpy` is currently `userland`-only
 
-This is about Python-like ergonomics for native Falcon code. It is **not** CPython compatibility and it does **not** mean arbitrary Python packages will run unchanged.
+This is a Falcon syntax front end, not CPython compatibility.
 
-## Imports And Library Model
+## Import System
 
-Falcon tries to keep runtime access explicit.
-
-You import modules directly:
+Falcon keeps runtime access explicit.
 
 ```falcon
 import string;
@@ -239,48 +182,28 @@ import random;
 import ai;
 ```
 
-In `userland`, routed imports like `import string;` resolve to the userland-facing module surface.
+Imports are profile-aware:
 
-In `kernel` and `baremetal`, those same userland imports are rejected and you are expected to use a profile-safe path such as `::raw` where appropriate.
+- in `userland`, routed modules such as `string` resolve to their userland surface
+- in `kernel` and `baremetal`, the same import is rejected unless a profile-safe path is used
+- runtime-backed symbols are expected to come from explicit imports rather than backend fallback
 
-Falcon currently checks imports in multiple places:
+Useful commands:
 
-- source-level import validation
-- import resolution and cycle detection
-- missing-import linting for runtime symbols
-- an IR import contract that rejects backend fallback magic
+```bash
+falcon check examples/hello_world.fc --dump-imports
+falcon build examples/hello_world.fc --strict-imports
+```
 
-That means a call like `println(...)` is supposed to come from an explicit import, not because the backend silently guessed what you meant.
+## Falcon and Ollama
 
-The library story right now looks like this:
-
-- `library/` contains real Falcon bindings over runtime symbols in `compiler/runtime/`
-- `stdlib/` is broader and more exploratory, and not all of it is equally mature yet
-
-Current implemented binding modules include:
-
-- `math`
-- `io`
-- `random`
-- `string`
-- `ai`
-
-Some APIs intentionally borrow Python-style ergonomics where it makes sense, especially around `random`, but they are Falcon-native bindings. Falcon is not shipping the CPython runtime inside this repo.
-
-## Falcon + Ollama
-
-One of the most fun userland demos in the repo is Falcon talking to a local Ollama model from native code.
+Falcon includes a userland `ai` binding layer that can invoke a local Ollama installation.
 
 Example file:
 
 - `examples/llm_ollama.fc`
 
 ```falcon
-// llm_ollama.fc - Real Ollama LLM Integration Demo
-// Compile with: falcon build examples/llm_ollama.fc --run
-//
-// This talks to your local Ollama install.
-// If needed, start Ollama with: ollama serve
 import string;
 import ai;
 
@@ -298,106 +221,57 @@ func main() {
 }
 ```
 
-What the `ai` module currently does:
-
-- exposes Falcon functions like `generate(...)` and `chat(...)`
-- routes them to native runtime hooks
-- those hooks invoke your local `ollama` command from userland
-
-### Run it yourself
-
-1. Install Ollama locally
-2. Pull a model:
+Run it:
 
 ```bash
 ollama pull phi3:mini
-```
-
-3. If your Ollama install is not already running, start it:
-
-```bash
 ollama serve
-```
-
-4. Run the Falcon demo
-
-If you installed the `falcon` CLI globally:
-
-```bash
 falcon build examples/llm_ollama.fc --run
 ```
 
-If you are running Falcon from source inside this repo:
-
-```bash
-cd compiler
-cargo run --features llvm --bin falcon -- build ../examples/llm_ollama.fc --run
-```
-
-If `ollama` is not on your `PATH`, Falcon also supports setting `FALCON_OLLAMA_CMD` to the executable path.
-
-This part is intentionally userland-only. Kernel and baremetal profiles do not get hosted AI/process helpers.
+If `ollama` is not on `PATH`, set `FALCON_OLLAMA_CMD` to the executable path.
 
 ### Screenshot
 
-Add your terminal screenshot here to show Falcon compiling a native userland program that imports `ai` and talks to a local Ollama model.
+Add a terminal screenshot here showing Falcon compiling a native userland program that imports `ai` and talks to a local Ollama model.
 
-## Honest Status
+## Project Status
 
-I want the repo to be clear about where Falcon is strong already and where it is still behind.
+Falcon should currently be described as:
 
-| Area | Where Falcon stands today |
-| --- | --- |
-| Profile model | Real and already enforced in the compiler |
-| One-file multi-profile builds | Real |
-| LLVM backend | Main backend and the serious compilation target |
-| `.fpy` front end | Real, but userland-only |
-| Import contract | Real and important to the design |
-| Ownership / borrow checking | Partial |
-| Memory safety story | Improving, but not Rust-complete |
-| Generics | Real, but still maturing |
-| Capturing closures | Not finished |
-| C backend | Legacy/debug-oriented, not the main target |
-| Library / stdlib surface | Useful, but ahead of some guarantees underneath |
-| Repo polish | Still needs cleanup in places |
+> An experimental systems language exploring compile-time execution profiles for userland, kernel, and baremetal targets.
 
-### What I am not claiming yet
+The repository already contains a real compiler, runtime sources, examples, and profile-aware validation. It also still has important gaps:
 
-I am not claiming:
+- ownership and memory guarantees are not yet Rust-complete
+- generics are implemented but still maturing
+- captured closures are not finished
+- the `stdlib/` tree is broader than the currently stable implementation surface
+- the C backend is legacy/debug-oriented; LLVM is the primary path
 
-- full Rust-grade memory safety
-- finished lifetime analysis
-- a complete standard library
-- production-readiness across all language features
+## Repository Layout
 
-The honest positioning for Falcon right now is:
-
-> **An experimental systems language exploring compile-time execution profiles for userland, kernel, and baremetal targets.**
-
-I think that is already interesting enough on its own.
-
-## Repository Map
-
-- `compiler/` - main compiler and CLI
-- `compiler/runtime/` - profile-specific runtime sources
-- `library/` - Falcon-native bindings over runtime functionality
-- `stdlib/` - broader standard-library direction, still partial
-- `examples/` - example programs
-- `examples/python_style/` - Python-style Falcon examples
-- `tools/fpy_transpiler/` - `.fpy` front end transpiler
+- `compiler/` - compiler, CLI, runtime sources, tests
+- `examples/` - Falcon examples, including profile demos and `.fpy` examples
+- `library/` - runtime-backed Falcon modules
+- `stdlib/` - broader, still-evolving standard-library direction
+- `tools/fpy_transpiler/` - `.fpy` front end
+- `docs/` - supporting technical documentation
 
 ## Documentation
 
+- [Falcon Language Reference](FALCON_LANGUAGE.md)
+- [Current Capabilities](CURRENT_CAPABILITIES.md)
 - [Design Principles](DESIGN_PRINCIPLES.md)
 - [Memory Model](MEMORY_MODEL.md)
 - [Ownership Rules](OWNERSHIP_RULES.md)
-- [IR Ownership Spec](IR_OWNERSHIP_SPEC.md)
-- [Import System Spec](IMPORT_SYSTEM_SPEC.md)
+- [Import System Specification](IMPORT_SYSTEM_SPEC.md)
+- [IR Ownership Specification](IR_OWNERSHIP_SPEC.md)
 - [Unsafe Guarantees](UNSAFE_GUARANTEES.md)
 - [Kernel Scope](KERNEL_SCOPE.md)
-- [What Falcon Will Never Do](WHAT_FALCON_WILL_NEVER_DO.md)
-- [Contributing](CONTRIBUTING.md)
-- [Library Binding System](library/README.md)
+- [Repository Overview](WHAT_WE_BUILT.md)
+- [Library README](library/README.md)
+- [Standard Library README](stdlib/README.md)
 
 ## License
 
