@@ -340,7 +340,8 @@ This part is intentionally userland-only. Kernel and baremetal profiles do not g
 
 ### Screenshot
 
-Add your terminal screenshot here to show Falcon compiling a native userland program that imports `ai` and talks to a local Ollama model.
+<img width="1456" height="471" alt="image" src="https://github.com/user-attachments/assets/0c180e04-0e67-4db0-ab05-f12af3e08a24" />
+
 
 ## Honest Status
 
